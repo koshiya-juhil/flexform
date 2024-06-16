@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .card {
+    @apply ml-5 mt-4;
+  }
+
+  .card_image {
+    @apply box-border h-32 w-36 cursor-pointer rounded-sm border border-gray-50 hover:border-purple-800;
+  }
+
+  .card_title {
+    @apply text-sm mt-0.5 text-slate-800 font-medium;
+  }
+
+  .form_header_icon {
+    @apply text-slate-800 text-xl;
+  }
+
+}

@@ -1,0 +1,12 @@
+:root {
+    --white: #ffffff;
+    --white-border: #fffdf7; /* border-gray-50 */
+    --white-900: #f4f4f9; /* bg-slate-100 */
+
+    --black: #000000;
+    --black-light: #202124; /* text-slate-800 */
+
+    --purple: #6e2594; /* border-purple-800 */
+
+    --grey: #5f6368; /*  */
+}
