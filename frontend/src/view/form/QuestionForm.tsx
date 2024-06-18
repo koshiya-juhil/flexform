@@ -39,7 +39,10 @@ function QuestionForm(props: QuestionFormProps) {
     const form = useSelector((state: RootState) => state.form);
 
     function handleOpenQuestion(index: number) {
-        if (openQuestion != index) {
+        if (openQuestion == index) {
+            setOpenQuestion(-1);
+        }
+        else {
             setOpenQuestion(index);
         }
     }
@@ -91,7 +94,7 @@ function QuestionForm(props: QuestionFormProps) {
 
                     {/* Questions : Form Fields */}
                     {form.formfields?.map((formfield, index) => (
-                        <Accordion key={index} expanded={openQuestion === index} onClick={() => handleOpenQuestion(index)} className={`my-2 rounded ${openQuestion === index ? 'add_border' : ''}`}>
+                        <Accordion key={index} expanded={openQuestion === index} onClick={() => handleOpenQuestion(index)} className={`my-2 !rounded ${openQuestion === index ? 'add_border' : ''}`}>
                             <AccordionSummary>
                                 <div>
                                     <span className="mr-1">{index + 1}.</span>

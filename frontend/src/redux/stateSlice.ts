@@ -1,21 +1,23 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { GenericStateType } from "../config/Types";
+import { GenericObjectType } from "../config/Types";
 
-const initialState: GenericStateType = {
+const initialState: GenericObjectType = {
     responseFormData: {},
+    myForms: [],
+    formResponses: [],
 };
 
 const stateSlice = createSlice({
     name: "state",
     initialState,
     reducers: {
-        setState(state, action: PayloadAction<GenericStateType>){
+        setState(state, action: PayloadAction<GenericObjectType>){
             return {
                 ...state,
                 ...action.payload
             };
         },
-        clearData(state, action: PayloadAction<keyof GenericStateType>){
+        clearData(state, action: PayloadAction<keyof GenericObjectType>){
             state[action.payload] = Array.isArray(state[action.payload]) ? [] : {}
         }
         // clearData(state, action: PayloadAction<string[]>){

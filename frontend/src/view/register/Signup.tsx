@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom"
 import { Config } from "../../config/IISMethods"
-import { GenericStateType } from "../../config/Types";
+import { GenericObjectType } from "../../config/Types";
 
 interface SignUpProps {
   handleForm: (key: string, value: string) => void;
   handleSignUp: () => void;
-  state: GenericStateType
+  state: GenericObjectType
 }
 
 function Signup(props: SignUpProps) {

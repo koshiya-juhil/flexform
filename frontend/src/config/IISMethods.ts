@@ -1,116 +1,198 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-import _Config from './Config';
-import { toast } from 'react-toastify';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import _Config from "./Config";
+import { toast } from "react-toastify";
+import { AnyArray, anyValue } from "./Types";
+// import axiosInstance from './axiosInstance';
 
 export const Config = new _Config();
 
 class _IISMethods {
-    constructor(){
-        
+  constructor() {}
+
+  getPagename() {
+    const url = window.location.pathname;
+    const pagename = url.split("/");
+    return pagename[pagename.length - 1];
+  }
+
+  // Local Storage Functions
+  setLocalStorageData<T>(key: string, value: T) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  getLocalStorageData<T>(key: string): T | null {
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : null;
+  }
+
+  clearLocalStorageData(key: string) {
+    localStorage.removeItem(key);
+  }
+
+  // Session Storage Functions
+  setSessionStorageData<T>(key: string, value: T) {
+    sessionStorage.setItem(key, JSON.stringify(value));
+  }
+
+  getSessionStorageData<T>(key: string): T | null {
+    const item = sessionStorage.getItem(key);
+    return item ? JSON.parse(item) : null;
+  }
+
+  clearSessionStorageData(key: string) {
+    sessionStorage.removeItem(key);
+  }
+
+  //  object and array methods
+  getCopy<T extends object>(element: T | T[]): T | T[] {
+    try {
+      if (Array.isArray(element)) {
+        return element.map((o) => Object.assign({}, o));
+      } else {
+        return Object.assign({}, element);
+      }
+    } catch (error) {
+      return Object.assign({}, element);
     }
+  }
 
-    getPagename(){
-        const url = window.location.pathname;
-        const pagename = url.split("/");
-        return pagename[pagename.length - 1];
+  /**
+   * Finds an object in an array based on a specific key-value pair.
+   * @returns {object | undefined} The object that matches the key-value pair, or undefined if not found.
+   */
+  getobjectfromarray(
+    arr: AnyArray,
+    key: string,
+    value: anyValue
+  ): anyValue | undefined {
+    try {
+      return arr.find((o) => o[key] == value);
+    } catch (error) {
+      return undefined;
     }
+  }
 
-    // Local Storage Functions
-    setLocalStorageData<T>(key: string, value: T){
-        localStorage.setItem(key, JSON.stringify(value));
+  getindexfromarray(arr: AnyArray, key: string, value: anyValue): number{
+    try {
+      return arr.findIndex(o => o[key] == value);
+    } catch (error) {
+      return -1;
     }
+  }
 
-    getLocalStorageData<T>(key: string): T | null{
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
+
+  // date and time methods
+  /**
+   * Formats a given date into various string formats based on the specified format identifier.
+   *
+   * @param {Date | string} date - The date to format. Can be a Date object or a date string.
+   * @param {number} format - The format identifier to determine the output format. Available formats:  1 => 'yyyy-MM-dd', 2 =>  'M/d/yyyy', 3 => 'M/d/yy', 4 => 'dd-MMM-yy', 5 => 'yy/MM/dd', 6 => 'MM/dd/yy', 7 => 'dd/MM/yyyy', 8 => 'MMM-yyyy',
+   * @returns {string} The formatted date string according to the specified format. Returns "Invalid Date" if the date is invalid or if the format identifier is unrecognized.
+   * @throws {Error} If the provided date is invalid.
+   */
+  getDateFormats(date: Date | string, format: number): string {
+    const parseDate = (date: Date | string): Date => {
+      const parsedDate = new Date(date);
+      if (isNaN(parsedDate.getTime())) {
+        throw new Error("Invalid Date");
+      }
+      return parsedDate;
+    };
+
+    const pad = (n: number): string => n.toString().padStart(2, "0");
+
+    try {
+      date = date.toString();
+      const dateobj = parseDate(date);
+      const year = dateobj.getFullYear(); // 2024
+      const month = dateobj.getMonth() + 1; // 9
+      const day = dateobj.getDate(); // 1
+
+      const yy = year.toString().slice(-2) || ""; // 24
+      const mm = pad(month);
+      const dd = pad(day);
+      const shortMonth = dateobj.toLocaleString("default", { month: "short" }); // Sep
+
+      switch (format) {
+        case 1:
+          return `${year}-${mm}-${dd}`; // 2024-09-01
+        case 2:
+          return `${month}/${day}/${year}`; // 9/1/2024
+        case 3:
+          return `${month}/${day}/${yy}`; // 9/1/24
+        case 4:
+          return `${dd}-${shortMonth}-${yy}`; // 01-Sep-24
+        case 5:
+          return `${yy}/${mm}/${dd}`; // 24/09/01
+        case 6:
+          return `${mm}/${dd}/${yy}`; // 09/01/24
+        case 7:
+          return `${dd}/${mm}/${year}`; // 01/09/2024
+        case 8:
+          return `${shortMonth}-${year}`; // Sep-2024
+        default:
+          return "Invalid Date Format";
+      }
+    } catch (error) {
+      console.log("error", error);
+      return "Invalid Date";
     }
+  }
 
-    clearLocalStorageData(key: string){
-        localStorage.removeItem(key);
-    }
+  async axiosRequest<T>(
+    method: AxiosRequestConfig["method"],
+    url: string,
+    reqBody: T,
+    reqHeaders: Record<string, string>,
+    successCallback: (response: AxiosResponse) => void,
+    errorCallback: (error: AxiosError | Error) => void
+  ): Promise<void> {
+    try {
+      // const response = await axiosInstance({
+      const response = await axios({
+        method: method,
+        url: url,
+        data: reqBody,
+        headers: reqHeaders,
+        withCredentials: true,
+      });
 
-    // Session Storage Functions
-    setSessionStorageData<T>(key: string, value: T){
-        sessionStorage.setItem(key, JSON.stringify(value));
-    }
+      if (response.data.notify) {
+        IISMethods.localnotify(response.data.message, 1);
+      }
 
-    getSessionStorageData<T>(key: string): T | null{
-        const item = sessionStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
-    }
-
-    clearSessionStorageData(key: string){
-        sessionStorage.removeItem(key);
-    }
-
-
-    getCopy<T extends object>(element: T | T[]): T | T[]{
-        try {
-            if(Array.isArray(element)){
-                return element.map(o => Object.assign({}, o));
-            } else {
-                return Object.assign({}, element);
-            }
-        } catch (error) {
-            return Object.assign({}, element);
+      successCallback(response);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          IISMethods.localnotify("Login to continue.", 0);
+          IISMethods.clearLocalStorageData("user");
+          // window.location.href = '/login';
+          // sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
+          // redirect to login and after login redirect back
         }
+
+        if (error?.response?.data.notify) {
+          IISMethods.localnotify(error?.response.data.error, 0);
+        }
+
+        errorCallback(error);
+      } else {
+        // Handle non-Axios errors
+        errorCallback(new Error("An unexpected error occurred"));
+      }
     }
+  }
 
-
-
-    async axiosRequest<T>(
-        method: AxiosRequestConfig['method'],
-        url: string,
-        reqBody: T,
-        reqHeaders: Record<string, string>,
-        successCallback: (response: AxiosResponse) => void,
-        errorCallback: (error: AxiosError | Error) => void
-    ): Promise<void> {
-
-        try {
-            const response = await axios({
-                method: method,
-                url: url,
-                data: reqBody,
-                headers: reqHeaders,
-                withCredentials: true
-            });
-            successCallback(response);
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if(error.response?.status === 401){
-                    IISMethods.localnotify('Login to continue.', 0);
-                    IISMethods.clearLocalStorageData('user');
-                    // window.location.href = '/login';
-                    // sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
-                    // redirect to login and after login redirect back 
-                }
-
-                if(error?.response?.data.notify){
-                    IISMethods.localnotify(error?.response.data.error, 0);
-                }
-
-                errorCallback(error);
-            } else {
-                // Handle non-Axios errors
-                errorCallback(new Error('An unexpected error occurred'));
-            }
-        }
+  localnotify(message: string, status: number) {
+    if (status === 1) {
+      toast.success(message);
+    } else if (status === 2) {
+      toast.warn(message);
+    } else {
+      toast.error(message);
     }
-
-    localnotify(message: string, status: number){
-        if(status === 1){
-            toast.success(message);
-        }
-        else if(status === 2){
-            toast.warn(message);
-        }
-        else {
-            toast.error(message);
-        }
-    }
-
-
+  }
 }
 
 export const IISMethods = new _IISMethods();

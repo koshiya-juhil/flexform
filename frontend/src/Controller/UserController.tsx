@@ -2,7 +2,7 @@ import { useState } from "react";
 import Signup from "../view/register/Signup";
 import SignIn from "../view/register/Signin";
 import { Config, IISMethods } from "../config/IISMethods";
-import { GenericStateType } from "../config/Types";
+import { GenericObjectType } from "../config/Types";
 import { AxiosError, AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -15,7 +15,7 @@ function UserController(props : UserProps) {
     const navigate = useNavigate();
 
     // const [state, setState] = useState<Record<string, any>>({});
-    const [state, setState] = useState<GenericStateType>({});
+    const [state, setState] = useState<GenericObjectType>({});
 
     const handleForm: (key: string, value: string) => void = (key, value) => {
         const tempState = IISMethods.getCopy(state);
@@ -26,7 +26,7 @@ function UserController(props : UserProps) {
     }
 
     const handleSignUp = () => {
-        const url = Config.webUrl + props.pagename;
+        const url = Config.serverUrl + props.pagename;
         const { email, password } = state;
         const reqData = { email, password };
 
@@ -45,7 +45,7 @@ function UserController(props : UserProps) {
     }
 
     const handleSignIn = () => {
-        const url = Config.webUrl + props.pagename;
+        const url = Config.serverUrl + props.pagename;
         const { email, password } = state;
         const reqData = { email, password };
 

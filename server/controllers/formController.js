@@ -5,7 +5,9 @@ async function getFormsByUser(req, res) {
     try {
         const user = req.user;
         const forms = await Form.find({ createdBy: user.id })
-        // console.log("forms", forms);
+        console.log("forms", forms.length);
+        
+        res.status(200).send(forms);
 
     } catch (error) {
         console.log("error", error);
@@ -68,7 +70,6 @@ async function updateForm(req, res){
             return res.status(404).json({ error: "Form not found", notify: true });
         }
 
-        console.log("updatedForm", updatedForm);
 
         res.status(200).send(updatedForm);
         

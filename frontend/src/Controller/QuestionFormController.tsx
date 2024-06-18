@@ -6,7 +6,8 @@ import { setForm } from '../redux/formSlice';
 import { Form, Value } from '../config/Types';
 import { Config, IISMethods } from '../config/IISMethods';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 interface QuestionFormControllerProps {
   pagename: string,
@@ -17,12 +18,37 @@ function QuestionFormController(props: QuestionFormControllerProps) {
 
   const navigate = useNavigate();
 
-  // const params = useParams();
-  // console.log("params", params);
-
   const form: Form = useSelector((state: RootState) => state.form);
   const dispatch = useDispatch();
-  // console.log("form", form);
+
+  const params = useParams();
+
+  const { formId } = params;
+
+  useEffect(() => {
+
+    if(formId != undefined && formId?.length && form._id != formId){
+      getFormById();
+    }
+
+  }, [formId])
+
+  async function getFormById() {
+    const url = Config.serverUrl + 'form' + '/' + formId;
+
+    await IISMethods.axiosRequest('get', url, {}, {}, SuccessCallback, ErrorCallback);
+
+    function SuccessCallback(res: AxiosResponse): void {
+      console.log(res.data);
+      dispatch(setForm(res.data));
+    }
+
+    function ErrorCallback(err: AxiosError | Error): void {
+      console.log(err);
+    }
+  }
+
+
 
   const handleForm: (key: string, value: Value) => void = (key, value) => {
     const temp = JSON.parse(JSON.stringify(form));
@@ -79,7 +105,7 @@ function QuestionFormController(props: QuestionFormControllerProps) {
   }
 
   const handleSave = () => {
-    const url = Config.webUrl + props.pagename + '/add';
+    const url = Config.serverUrl + props.pagename + '/add';
     const reqData = IISMethods.getCopy(form);
 
     IISMethods.axiosRequest('post', url, reqData, {}, addSuccessCallback, addErrorCallback);
@@ -99,7 +125,7 @@ function QuestionFormController(props: QuestionFormControllerProps) {
   }
 
   const handleUpdate = () => {
-    const url = Config.webUrl + props.pagename + '/update';
+    const url = Config.serverUrl + props.pagename + '/update';
     const reqData = IISMethods.getCopy(form);
 
     IISMethods.axiosRequest('put', url, reqData, {}, SuccessCallback, ErrorCallback)

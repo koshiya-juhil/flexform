@@ -22,6 +22,14 @@ body {
   margin: 0;
 }
 
+/* #root {
+    height: 100vh;
+}
+
+.app {
+    height: 100%;
+} */
+
 .font-roboto {
     font-family: 'Roboto, Arial, sans-sarif';
 }

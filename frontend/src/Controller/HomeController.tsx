@@ -2,20 +2,24 @@ import { useEffect } from "react"
 import Home from "../view/home/Home"
 import { Config, IISMethods } from "../config/IISMethods";
 import { AxiosError, AxiosResponse } from "axios";
+import { useDispatch } from "react-redux";
+import { setState } from "../redux/stateSlice";
 
 function HomeController() {
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         listForms();
     }, [])
     
     async function listForms(){
-        const url = Config.webUrl + 'form' + '/list';
+        const url = Config.serverUrl + 'form' + '/list';
 
         IISMethods.axiosRequest('get', url, {}, {}, listSuccessCallback, listErrorCallback);
 
         function listSuccessCallback(res: AxiosResponse): void{
-            console.log(res);
+            dispatch(setState({ myForms: res.data }));
         }
 
         function listErrorCallback(err: AxiosError | Error): void{

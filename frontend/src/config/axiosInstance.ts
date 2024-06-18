@@ -1,8 +1,10 @@
 import axios, { AxiosError } from "axios";
 import { Config, IISMethods } from "./IISMethods";
 
+const baseUrl = Config.serverUrl;
+
 const axiosInstance = axios.create({
-    baseURL: Config.webUrl,
+    baseURL: baseUrl,
     withCredentials: true
 })
 

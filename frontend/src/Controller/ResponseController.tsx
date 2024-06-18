@@ -1,5 +1,5 @@
-import { useEffect } from "react"
-import ResponseForm from "../view/form/ResponseForm"
+import { useEffect, useState } from "react"
+import ResponseForm from "../view/response/ResponseForm"
 import { Config, IISMethods } from "../config/IISMethods"
 import { AxiosError, AxiosResponse } from "axios";
 import { useParams } from "react-router-dom";
@@ -7,13 +7,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { setForm, clearForm } from "../redux/formSlice";
 import { setState } from "../redux/stateSlice";
-import { GenericStateType } from "../config/Types";
+import { GenericObjectType } from "../config/Types";
 
 function ResponseController() {
     const { formId } = useParams();
     const dispatch = useDispatch();
     const formData = useSelector((store: RootState) => store.form);
     const state = useSelector((store: RootState) => store.state);
+
+    const [responseSubmitted, setResponseSubmitted] = useState<boolean>(false);
 
     useEffect(() => {
         getFormById();
@@ -23,6 +25,7 @@ function ResponseController() {
         })
 
     }, [formId])
+    
 
     useEffect(() => {
         setDefaultFormData();
@@ -30,7 +33,7 @@ function ResponseController() {
     
 
     async function getFormById() {
-        const url = Config.webUrl + 'form' + '/' + formId;
+        const url = Config.serverUrl + 'form' + '/' + formId;
 
         await IISMethods.axiosRequest('get', url, {}, {}, SuccessCallback, ErrorCallback);
 
@@ -46,7 +49,7 @@ function ResponseController() {
     }
 
     function setDefaultFormData(){
-        const tempFormData : GenericStateType = {};
+        const tempFormData : GenericObjectType = {};
         formData.formfields.map((field: { type: string }, index : number) => {
             if(field.type === 'text' || field.type === 'paragraph'){
                 tempFormData[index] = '';
@@ -86,11 +89,11 @@ function ResponseController() {
     }
 
     async function submitResponse(){
-        // const url = Config.webUrl + 'response' + '/add'
+        const url = Config.serverUrl + 'form' + '/response' + '/add'
 
-        const responses: GenericStateType[] = [];
+        const responses: GenericObjectType[] = [];
         Object.entries(state.responseFormData).map(([key, value]) => {
-            const obj: GenericStateType = {};
+            const obj: GenericObjectType = {};
             const field = formData.formfields[Number(key)];
             
             obj.fieldId = field._id;
@@ -112,17 +115,30 @@ function ResponseController() {
             responses.push(obj);
         })
 
+        const user: GenericObjectType | null = IISMethods.getLocalStorageData('user');
+
         const reqData = {
             formId: formData._id,
             responses: responses,
             submittedBy: {
-                id: '',
+                id: user ? user._id : '',
                 name: '',
-                email: ''
+                email: user ? user.email : '',
             }
         }
 
         console.log("reqData", reqData);
+
+        IISMethods.axiosRequest('post', url, reqData, {}, SuccessCallback, ErrorCallback);
+        
+        function SuccessCallback(res: AxiosResponse){
+            console.log("res.data", res.data);
+            setResponseSubmitted(true);
+        }
+
+        function ErrorCallback(error: AxiosError | Error){
+            console.log("error", error);
+        }
 
     }
 
@@ -132,6 +148,8 @@ function ResponseController() {
             <ResponseForm
                 handleFormData={handleFormData}
                 submitResponse={submitResponse}
+                setDefaultFormData={setDefaultFormData}
+                responseSubmitted={responseSubmitted}
             />
         </>
     )

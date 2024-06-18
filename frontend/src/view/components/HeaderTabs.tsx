@@ -1,4 +1,6 @@
 import { Paper, Tab, Tabs } from "@mui/material"
+import { formtab } from "../../config/Types"
+// import { purple } from "@mui/material/colors";
 // import { makeStyles } from "@mui/material"
 
 // const useStyles : () => Record<string, string> = makeStyles(() => ({
@@ -18,7 +20,12 @@ import { Paper, Tab, Tabs } from "@mui/material"
 //     }
 // }))
 
-function HeaderTabs() {
+interface HeaderTabsProps {
+    formTab: formtab;
+    setFormTab: React.Dispatch<React.SetStateAction<formtab>>;
+}
+
+function HeaderTabs(props: HeaderTabsProps) {
 
     // const classes = useStyles();
 
@@ -26,10 +33,16 @@ function HeaderTabs() {
         <Paper className="paper-root">
             <Tabs 
                 className="tabs"
-                textColor="primary"
-                indicatorColor="primary"
+                textColor="secondary"
+                indicatorColor="secondary"
                 centered={true}
-                value="questions"
+                value={props.formTab}
+                onChange={(e, val) => props.setFormTab(val)}
+                // sx={{
+                //     '&.Mui-selected': {
+                //         color: purple[800],
+                //     },
+                // }}
             >
                 <Tab label="Questions" id="questions" value="questions" className="tab"></Tab>
                 <Tab label="Responses" id="responses" value="responses" className="tab"></Tab>

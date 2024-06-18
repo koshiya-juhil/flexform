@@ -11,8 +11,7 @@ interface FormHeaderProps {
 }
 
 const FormHeader = (props: FormHeaderProps) => {
-    const formUrl = Config.webUrl + 'form' + '/respond/' + props.formData._id;
-    console.log("formUrl", formUrl)
+    const formUrl = Config.webUrl + 'form/response/' + props.formData._id;
     return (
         <div className="flex items-center justify-between my-1 mx-4">
             <div className="flex items-center justify-evenly">

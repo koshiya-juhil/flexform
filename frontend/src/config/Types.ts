@@ -46,9 +46,14 @@ export interface AppState {
   userRights?: any[];
 }
 
-export type GenericStateType = { [key: string]: any };
-// export type GenericStateType<T> = { [key: string]: T };
+export type GenericObjectType = { [key: string]: any };
+// export type GenericObjectType<T> = { [key: string]: T };
 
 export type GenericArray<T> = Array<T>;
 
 export type State = Record<string, any>;
+
+export type formtab = 'questions' | 'responses';
+
+export type AnyArray = any[];
+export type anyValue = any;
