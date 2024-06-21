@@ -18,8 +18,9 @@ async function handleSignUp(req, res){
         let user = JSON.parse(JSON.stringify(response));
         delete user.password;
 
+        const maxAge = (24 * 60 * 60 * 1000) * 31;
         // res.cookie("token", token.toString(), { httpOnly: true, maxAge: 900000 })
-        res.cookie("token", token.toString(), { httpOnly: true })
+        res.cookie("token", token.toString(), { maxAge: maxAge, httpOnly: true, secure: true, sameSite: 'None' })
         res.status(200).json({user: user});
 
     } catch (error) {
@@ -47,8 +48,8 @@ async function handleSignIn(req, res){
         delete temp.password;
         
         const maxAge = (24 * 60 * 60 * 1000) * 31;
-        res.cookie("token", token.toString(), { maxAge: maxAge, httpOnly: true, secure: true })
-        res.json({user: temp});
+        res.cookie("token", token.toString(), { maxAge: maxAge, httpOnly: true, secure: true, sameSite: 'None' })
+        res.status(200).json({user: temp});
         // res.cookie("token", token.toString()).json({user: temp});
 
     } catch (error) {
