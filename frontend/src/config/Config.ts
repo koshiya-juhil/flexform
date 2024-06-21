@@ -8,12 +8,12 @@ export default class Config {
         this.websitename = "Flex Form"
         
         if(this.servermode == 'dev'){
-            this.serverurl = "http://localhost:8000/"
-            this.weburl = "http://localhost:3000/"
+            this.serverurl = import.meta.env.VITE_DEV_SERVER_URL;
+            this.weburl = import.meta.env.VITE_DEV_URL;
         }
         else if(this.servermode == 'prod'){
-            this.serverurl = "https://flexform-kqne.onrender.com/"
-            this.weburl = "http://localhost:3000/"
+            this.serverurl = import.meta.env.VITE_PROD_SERVER_URL;
+            this.weburl = import.meta.env.VITE_PROD_URL;
         }
     }
 
