@@ -11,14 +11,26 @@ const formRoutes = require('./routes/formRoute');
 require('dotenv').config();
 const PORT = process.env.PORT || 8000;
 
+const prodOrigins = [process.env.ORIGIN_PROD_1]
+const devOrigins = [process.env.ORIGIN_LOCAL]
+const allowedOrigins = process.env.NODE_ENV === 'prod' ? prodOrigins : devOrigins;
+
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: (origin, callback) => {
+        if(allowedOrigins.includes(origin)){
+            callback(null, true);
+        }
+        else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     optionsSuccessStatus: 200,
+    methods: ['GET', 'POST', 'PUT']
 }
 
+app.use(cors(corsOptions));
 app.use(cookieParser());
-app.use(cors(corsOptions))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(checkForAuthentication);
