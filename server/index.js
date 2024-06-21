@@ -17,6 +17,8 @@ const allowedOrigins = process.env.NODE_ENV === 'prod' ? prodOrigins : devOrigin
 
 const corsOptions = {
     origin: (origin, callback) => {
+        console.log('allowedOrigins:', allowedOrigins);
+        console.log('Origin:', origin);
         if(allowedOrigins.includes(origin)){
             callback(null, true);
         }

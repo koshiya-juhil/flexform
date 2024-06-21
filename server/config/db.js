@@ -3,6 +3,8 @@ require('dotenv').config();
 
 const mongoUrl = process.env.NODE_ENV === 'prod' ? process.env.MONGODB_PROD_URL : process.env.MONGODB_URL
 
+console.log("mongoUrl", mongoUrl)
+
 mongoose.connect(mongoUrl)
 
 const db = mongoose.connection;
