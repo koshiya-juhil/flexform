@@ -165,7 +165,7 @@ class _IISMethods {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
-          IISMethods.localnotify("Login to continue.", 0);
+          !error?.response?.data.notify && IISMethods.localnotify("Login to continue.", 0);
           IISMethods.clearLocalStorageData("user");
           // window.location.href = '/login';
           // sessionStorage.setItem('redirectAfterLogin', window.location.pathname);

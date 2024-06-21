@@ -37,7 +37,7 @@ function HeaderTabs(props: HeaderTabsProps) {
                 indicatorColor="secondary"
                 centered={true}
                 value={props.formTab}
-                onChange={(e, val) => props.setFormTab(val)}
+                onChange={(_, val) => props.setFormTab(val)}
                 // sx={{
                 //     '&.Mui-selected': {
                 //         color: purple[800],
