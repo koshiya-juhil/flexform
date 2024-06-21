@@ -94,8 +94,8 @@ function QuestionForm(props: QuestionFormProps) {
 
                     {/* Questions : Form Fields */}
                     {form.formfields?.map((formfield, index) => (
-                        <Accordion key={index} expanded={openQuestion === index} onClick={() => handleOpenQuestion(index)} className={`my-2 !rounded ${openQuestion === index ? 'add_border' : ''}`}>
-                            <AccordionSummary>
+                        <Accordion key={index} expanded={openQuestion === index} className={`my-2 !rounded ${openQuestion === index ? 'add_border' : ''}`}>
+                            <AccordionSummary onClick={() => handleOpenQuestion(index)} >
                                 <div>
                                     <span className="mr-1">{index + 1}.</span>
                                     <span>{formfield.text}</span>
