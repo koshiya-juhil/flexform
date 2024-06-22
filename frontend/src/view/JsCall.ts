@@ -39,12 +39,9 @@ export default class JsCall {
             }
         }
 
-        const errElement: HTMLElement = document.getElementById(`${id}-errortext`);
-        if(errText){
-            errElement.innerHTML = errText;
-        }
-        else {
-            errElement.innerHTML = '';
+        const errElement: HTMLElement | null = document.getElementById(`${id}-errortext`);
+        if(errElement){
+            errElement.innerHTML = errText ? errText : '';
         }
 
     }
