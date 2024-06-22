@@ -23,7 +23,7 @@ export default function Router(){
 
                 <Route 
                     path="form/response/:formId"
-                    element={<ResponseController />}
+                    element={<ResponseController formname="response" />}
                 ></Route>
 
                 <Route 

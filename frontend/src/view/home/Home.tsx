@@ -4,6 +4,8 @@ import RecentForms from "../components/RecentForms";
 
 interface HomeProps {
     handleLogout: () => void;
+    searchQuery: string;
+    handleSearchQuery: (value: string) => void;
 }
 
 const Home = (props: HomeProps) => {
@@ -13,6 +15,8 @@ const Home = (props: HomeProps) => {
             <>
                 <Header
                     handleLogout={props.handleLogout}
+                    searchQuery={props.searchQuery}
+                    handleSearchQuery={props.handleSearchQuery}
                 />
                 <HomeTemplate/>
                 <RecentForms/>

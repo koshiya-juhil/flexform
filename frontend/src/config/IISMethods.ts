@@ -1,10 +1,12 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import _Config from "./Config";
+import _JsCall from '../view/JsCall';
 import { toast } from "react-toastify";
 import { AnyArray, anyValue } from "./Types";
 // import axiosInstance from './axiosInstance';
 
 export const Config = new _Config();
+export const JsCall = new _JsCall();
 
 class _IISMethods {
   constructor() {}

@@ -9,6 +9,8 @@ type userType = { email: string, _id: string } | null | undefined;
 
 interface HeaderProps {
     handleLogout: () => void;
+    searchQuery: string;
+    handleSearchQuery: (value: string) => void;
 }
 
 function Header(props: HeaderProps) {
@@ -17,17 +19,14 @@ function Header(props: HeaderProps) {
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-
-    const user: userType = IISMethods.getLocalStorageData('user');
-    console.log('user', user);
-
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
-
+    
+    const user: userType = IISMethods.getLocalStorageData('user');
 
     return (
         <div className="flex justify-between sticky mx-2 py-1 items-center bg-white text-black">
@@ -40,7 +39,10 @@ function Header(props: HeaderProps) {
 
             <div className="flex items-center flex-row w-1/2 h-11 rounded bg-slate-100">
                 <IconButton><Search /></IconButton>
-                <input type="text" name="search" placeholder="search" className="border-none h-10 bg-transparent outline-none w-full" />
+                <input type="text" name="search" placeholder="search" className="border-none h-10 bg-transparent outline-none w-full" 
+                    value={props.searchQuery}
+                    onChange={(e) => props.handleSearchQuery(e.target.value)}
+                />
             </div>
 
             <div className="flex items-center">

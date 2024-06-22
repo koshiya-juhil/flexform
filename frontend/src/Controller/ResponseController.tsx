@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import ResponseForm from "../view/response/ResponseForm"
-import { Config, IISMethods } from "../config/IISMethods"
+import { Config, IISMethods, JsCall } from "../config/IISMethods"
 import { AxiosError, AxiosResponse } from "axios";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +9,11 @@ import { setForm, clearForm } from "../redux/formSlice";
 import { setState } from "../redux/stateSlice";
 import { GenericObjectType } from "../config/Types";
 
-function ResponseController() {
+interface ResponseControllerProps {
+    formname: string;
+}
+
+function ResponseController(props: ResponseControllerProps) {
     const { formId } = useParams();
     const dispatch = useDispatch();
     const formData = useSelector((store: RootState) => store.form);
@@ -86,6 +90,9 @@ function ResponseController() {
         }
 
         dispatch(setState({ responseFormData: tempFormData }));
+
+        JsCall.validateForm(tempFormData, formData.formfields, Number(key), props.formname, true);
+        
     }
 
     async function submitResponse(){
@@ -150,6 +157,7 @@ function ResponseController() {
                 submitResponse={submitResponse}
                 setDefaultFormData={setDefaultFormData}
                 responseSubmitted={responseSubmitted}
+                formname={props.formname}
             />
         </>
     )

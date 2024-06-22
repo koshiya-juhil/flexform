@@ -70,6 +70,13 @@ function ResponseView(props: ResponseViewProps) {
         <div className="bg-slate-100 h-full mt-3">
             <div className="pb-7 m-auto w-45p">
 
+                {/* <div className="question_title_section border-light rounded-lg">
+                    <div className="bg-white border-t-8 border-t-purple-800 rounded-lg pb-5 pt-3 px-6">
+                        <h1 className="text-2xl font-semibold">{formData.title}</h1>
+                        <p className="text-base mt-2 font-medium">{formData.description}</p>
+                    </div>
+                </div> */}
+
                 <div className="border-light rounded-lg my-2">
                     <div className="flex flex-row justify-between bg-white rounded-lg pb-5 pt-3 px-6">
                         <h1 className="text-2xl font-medium">{formResponses.length} Responses</h1>
@@ -87,106 +94,100 @@ function ResponseView(props: ResponseViewProps) {
                         </div>
                     </div>
                 </div>
+                
+                {formResponses.length ? <>
+                    <div className="flex flex-row items-center mb-1">
+                        <button className="px-3 py-1 m-1 bg-purple-800 text-white text-sm rounded-md font-semibold hover:bg-purple-800/[0.8] hover:shadow-lg"
+                            onClick={() => setResponseIndex(prev => prev-1)}
+                            disabled={responseIndex == 0}
+                        >Prev</button>
 
-                <div className="flex flex-row items-center mb-1">
-                    <button className="px-3 py-1 m-1 bg-purple-800 text-white text-sm rounded-md font-semibold hover:bg-purple-800/[0.8] hover:shadow-lg"
-                        onClick={() => setResponseIndex(prev => prev-1)}
-                        disabled={responseIndex == 0}
-                    >Prev</button>
+                        <p>{responseIndex+1} of {formResponses.length}</p>
 
-                    <p>{responseIndex+1} of {formResponses.length}</p>
-
-                    <button className="px-3 py-1 m-1 bg-purple-800 text-white text-sm rounded-md font-semibold hover:bg-purple-800/[0.8] hover:shadow-lg"
-                        onClick={() => setResponseIndex(prev => prev+1)}
-                        disabled={responseIndex == (formResponses.length-1)}
-                    >Next</button>
-                </div>
-
-                <div className="question_title_section border-light rounded-lg">
-                    <div className="bg-white border-t-8 border-t-purple-800 rounded-lg pb-5 pt-3 px-6">
-                        <h1 className="text-2xl font-semibold">{formData.title}</h1>
-                        <p className="text-base mt-2 font-medium">{formData.description}</p>
-                        <p className="mt-4 text-base">Your response has been recorded.</p>
+                        <button className="px-3 py-1 m-1 bg-purple-800 text-white text-sm rounded-md font-semibold hover:bg-purple-800/[0.8] hover:shadow-lg"
+                            onClick={() => setResponseIndex(prev => prev+1)}
+                            disabled={responseIndex == (formResponses.length-1)}
+                        >Next</button>
                     </div>
-                </div>
 
 
-                {/* Questions */}
-                {formData.formfields.map((field, index) => (
-                    <div className="bg-white rounded-lg py-6 px-4 capitalize flex flex-col w-full my-3 border-light" key={index}>
-                        {/* question name */}
-                        <div className="mb-4">{field.text}</div>
+                    {/* Questions */}
+                    {formData.formfields.map((field, index) => (
+                        <div className="bg-white rounded-lg py-6 px-4 capitalize flex flex-col w-full my-3 border-light" key={index}>
+                            {/* question name */}
+                            <div className="mb-4">{field.text}</div>
 
-                        <div>
-                            {field.type === 'text' ?
-                                <input type="text" placeholder="Your answer" className="box-border text-sm w-1/2 outline-none border-bottom-slight h-8 focus:border-b-purple-800 focus:border-b-2"
-                                    defaultValue={responseFormData[index]}
-                                    disabled={true}
-                                />
-
-                                : field.type === 'paragraph' ?
-                                    <textarea placeholder="Your answer"
-                                        className="box-border text-sm w-full outline-none border-bottom-slight h-8 focus:border-b-purple-800 focus:border-b-2 resize-none overflow-hidden"
-                                        value={responseFormData[index]}
-                                        onInput={(e) => {
-                                            e.currentTarget.style.height = '';
-                                            e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
-                                        }}
+                            <div>
+                                {field.type === 'text' ?
+                                    <input type="text" placeholder="" className="box-border text-sm w-1/2 outline-none border-bottom-slight h-8 focus:border-b-purple-800 focus:border-b-2"
+                                        defaultValue={responseFormData[index]}
                                         disabled={true}
                                     />
 
-                                    : field.type === 'radio' ?
-                                        <div>
-                                            <RadioGroup
-                                                aria-labelledby="demo-radio-buttons-group-label"
-                                                // value={responseFormData[index]}
-                                                name="radio-buttons-group"
-                                            >
-                                                {field.options.map((option, i) => (
-                                                    <FormControlLabel
-                                                        value={i}
-                                                        control={
-                                                            <Radio
-                                                                sx={{
-                                                                    '&.Mui-checked': {
-                                                                        color: purple[800],
-                                                                    },
-                                                                }}
-                                                            />
-                                                        }
-                                                        label={option.label}
-                                                        checked={i == responseFormData[index]}
-                                                        disabled={i != responseFormData[index]}
-                                                    />
-                                                ))}
-                                            </RadioGroup>
-                                        </div>
+                                    : field.type === 'paragraph' ?
+                                        <textarea placeholder=""
+                                            className="box-border text-sm w-full outline-none border-bottom-slight h-8 focus:border-b-purple-800 focus:border-b-2 resize-none overflow-hidden"
+                                            value={responseFormData[index]}
+                                            onInput={(e) => {
+                                                e.currentTarget.style.height = '';
+                                                e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
+                                            }}
+                                            disabled={true}
+                                        />
 
-                                        : field.type === 'checkbox' ?
-                                            <div className="flex flex-col">
-                                                {field.options.map((option, i) => (
-                                                    <FormControlLabel
-                                                        control={
-                                                            <Checkbox
-                                                                sx={{
-                                                                    '&.Mui-checked': {
-                                                                        color: purple[800],
-                                                                    }
-                                                                }}
-                                                                checked={responseFormData[index]?.includes(i) || false}
-                                                                disabled={responseFormData[index]?.includes(i) ? false : true}
-                                                            />
-                                                        }
-                                                        label={option.label}
-                                                    />
-                                                ))}
+                                        : field.type === 'radio' ?
+                                            <div>
+                                                <RadioGroup
+                                                    aria-labelledby="demo-radio-buttons-group-label"
+                                                    // value={responseFormData[index]}
+                                                    name="radio-buttons-group"
+                                                >
+                                                    {field.options.map((option, i) => (
+                                                        <FormControlLabel
+                                                            value={i}
+                                                            control={
+                                                                <Radio
+                                                                    sx={{
+                                                                        '&.Mui-checked': {
+                                                                            color: purple[800],
+                                                                        },
+                                                                    }}
+                                                                />
+                                                            }
+                                                            label={option.label}
+                                                            checked={i == responseFormData[index]}
+                                                            disabled={i != responseFormData[index]}
+                                                        />
+                                                    ))}
+                                                </RadioGroup>
                                             </div>
 
-                                            : <></>}
-                        </div>
+                                            : field.type === 'checkbox' ?
+                                                <div className="flex flex-col">
+                                                    {field.options.map((option, i) => (
+                                                        <FormControlLabel
+                                                            control={
+                                                                <Checkbox
+                                                                    sx={{
+                                                                        '&.Mui-checked': {
+                                                                            color: purple[800],
+                                                                        }
+                                                                    }}
+                                                                    checked={responseFormData[index]?.includes(i) || false}
+                                                                    disabled={responseFormData[index]?.includes(i) ? false : true}
+                                                                />
+                                                            }
+                                                            label={option.label}
+                                                        />
+                                                    ))}
+                                                </div>
 
-                    </div>
-                ))}
+                                                : <></>}
+                            </div>
+
+                        </div>
+                    ))}
+                </> : <></>}
 
                 <div className="flex justify-center items-center mt-6 text-2xl text-gray-500">
                     <span className="mr-1 font-medium">Flex</span>

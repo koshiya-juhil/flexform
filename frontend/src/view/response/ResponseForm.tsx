@@ -9,7 +9,8 @@ interface ResponseFormProps {
     handleFormData: (type: string, key: number | string, value: string | number | boolean, index?: number) => void;
     submitResponse: () => void;
     setDefaultFormData: () => void;
-    responseSubmitted: boolean
+    responseSubmitted: boolean;
+    formname: string;
 }
 
 function ResponseForm(props: ResponseFormProps) {
@@ -58,19 +59,21 @@ function ResponseForm(props: ResponseFormProps) {
 
                                 {/* Questions */}
                                 {formData.formfields.map((field, index) => (
-                                    <div className="bg-white rounded-lg py-6 px-4 capitalize flex flex-col w-full my-3 border-light" key={index}>
+                                    <div className="form-group bg-white rounded-lg py-6 px-4 flex flex-col w-full my-3 border-light" key={index}>
                                         {/* question name */}
-                                        <div className="mb-4">{field.text}</div>
+                                        <div className="mb-4">{field.text} {field.required ? <span className="text-red-700"> * </span> : <></>}</div>
 
                                         <div>
                                             {field.type === 'text' ?
                                                 <input type="text" placeholder="Your answer" className="box-border text-sm w-1/2 outline-none border-bottom-slight h-8 focus:border-b-purple-800 focus:border-b-2"
+                                                    id={`${props.formname ? props.formname : 'form'}-${index}`}
                                                     value={responseFormData[index]}
                                                     onChange={(e) => props.handleFormData(field.type, index, e.target.value)}
                                                 />
 
                                                 : field.type === 'paragraph' ?
                                                     <textarea placeholder="Your answer"
+                                                        id={`${props.formname ? props.formname : 'form'}-${index}`}
                                                         className="box-border text-sm w-full outline-none border-bottom-slight h-8 focus:border-b-purple-800 focus:border-b-2 resize-none overflow-hidden"
                                                         value={responseFormData[index]}
                                                         onInput={(e) => {
@@ -83,7 +86,7 @@ function ResponseForm(props: ResponseFormProps) {
                                                     />
 
                                                     : field.type === 'radio' ?
-                                                        <div>
+                                                        <div id={`${props.formname ? props.formname : 'form'}-${index}`}>
                                                             <RadioGroup
                                                                 aria-labelledby="demo-radio-buttons-group-label"
                                                                 value={responseFormData[index]}
@@ -106,10 +109,15 @@ function ResponseForm(props: ResponseFormProps) {
                                                                     />
                                                                 ))}
                                                             </RadioGroup>
+                                                            {!field.required && responseFormData[index] >= 0 ?
+                                                                <button className="text-gray-700 hover:bg-slate-100 p-1 rounded text-sm float-right" 
+                                                                    onClick={() => props.handleFormData(field.type, index, -1)}
+                                                                >Clear Selection</button> 
+                                                            : <></>}
                                                         </div>
 
                                                         : field.type === 'checkbox' ?
-                                                            <div className="flex flex-col">
+                                                            <div className="flex flex-col" id={`${props.formname ? props.formname : 'form'}-${index}`}>
                                                                 {field.options.map((option, i) => (
                                                                     <FormControlLabel
                                                                         control={
@@ -130,6 +138,11 @@ function ResponseForm(props: ResponseFormProps) {
 
                                                             : <></>}
                                         </div>
+
+                                        <div 
+                                            id={`${props.formname ? props.formname : 'form'}-${index}-errortext`} 
+                                            className="error-text text-xs"
+                                        ></div>
 
                                     </div>
                                 ))}

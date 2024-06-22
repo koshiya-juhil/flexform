@@ -7,7 +7,7 @@ interface ResponseTabProps {
 function ResponseTab(props: ResponseTabProps) {
   return (
     <ResponseView 
-    handleUpdateForm={props.handleUpdateForm}
+      handleUpdateForm={props.handleUpdateForm}
     />
   )
 }

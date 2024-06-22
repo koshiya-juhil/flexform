@@ -15,7 +15,8 @@
 }
 
 * {
-    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 body {
@@ -31,84 +32,103 @@ body {
 } */
 
 .font-roboto {
-    font-family: 'Roboto, Arial, sans-sarif';
+  font-family: "Roboto, Arial, sans-sarif";
 }
 
 .font-google-sans {
-    font-family: 'Google sans', Roboto, Arial, sans-serif;
+  font-family: "Google sans", Roboto, Arial, sans-serif;
 }
 
 .form_input:focus {
-    border-bottom: 1px solid black;
+  border-bottom: 1px solid black;
 }
 
 .paper-root {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .tab {
-    font-size: 12px;
-    color: var(--grey);
-    text-transform: capitalize;
-    height: 10;
-    font-weight: 600;
-    font-family: "Google Sans, Roboto, Arial, sans-serif";
+  font-size: 12px;
+  color: var(--grey);
+  text-transform: capitalize;
+  height: 10;
+  font-weight: 600;
+  font-family: "Google Sans, Roboto, Arial, sans-serif";
 }
 
 .tabs {
-    height: 10;
+  height: 10;
 }
 
 .question:focus {
-    border-bottom: 1px solid rgb(103, 58, 183);
-    background-color: var(--white-900);
+  border-bottom: 1px solid rgb(103, 58, 183);
+  background-color: var(--white-900);
 }
 
 .select {
-    width: 230px;
-    border: 0.5px solid;
-    border: 1.5px solid var(--white-900);
-    border-radius: 2px;
+  width: 230px;
+  border: 0.5px solid;
+  border: 1.5px solid var(--white-900);
+  border-radius: 2px;
 }
 
 .text_input {
-    width: 490px;
+  width: 490px;
 }
 
 .text_input:focus {
-    border-bottom: 2px solid rgb(103, 58, 183);
+  border-bottom: 2px solid rgb(103, 58, 183);
 }
 
 .add_border {
-    border-left: 6px solid #4285f4;
+  border-left: 6px solid #4285f4;
 }
 
 .edit_icon {
-    color: var(--grey);
-    padding: 8px 5px;
-    font-size: 2.2rem !important;
+  color: var(--grey);
+  padding: 8px 5px;
+  font-size: 2.2rem !important;
 }
 
 .bg-soft-bluetowhite {
-    /* background: linear-gradient(to bottom, #e0f7fa, #ffffff); */
-    /* background: linear-gradient(to bottom, #E6E6FA, #ffffff);  */
-    background: linear-gradient(to bottom, #E0E0F8, #ffffff);
-    /* background: linear-gradient(to bottom, #D8BFD8, #ffffff); */
+  /* background: linear-gradient(to bottom, #e0f7fa, #ffffff); */
+  /* background: linear-gradient(to bottom, #E6E6FA, #ffffff);  */
+  background: linear-gradient(to bottom, #e0e0f8, #ffffff);
+  /* background: linear-gradient(to bottom, #D8BFD8, #ffffff); */
 }
 
 .border-light {
-    border: 0.5px solid rgba(128, 128, 128, 0.268);
+  border: 0.5px solid rgba(128, 128, 128, 0.268);
 }
 
 .border-bottom-slight {
-    border-bottom: 0.2px solid rgba(128, 128, 128, 0.268);
+  border-bottom: 0.3px solid rgba(128, 128, 128, 0.268);
 }
 
 .w-45p {
-    width: 45%;
+  width: 45%;
 }
 
+/* .form-group.error input,
+.form-group.error textarea,
+.form-group.error .MuiFormControlLabel-root {
+    border-color: #f56565; 
+    color: #f56565; 
+} */
 
+.form-group.error {
+    border-color: #f56565;
+}
+
+.form-group.error input,
+.form-group.error textarea {
+    border-color: #f56565;
+    color: #f56565;
+}
+
+.form-group.error .error-text{
+    color: #f56565;
+}
 
 /* *********** Copy ***************** */
 /* Header Page */

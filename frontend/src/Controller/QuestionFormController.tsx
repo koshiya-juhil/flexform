@@ -2,12 +2,13 @@
 import QuestionFormView from '../view/form/QuestionFormView'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { setForm } from '../redux/formSlice';
+import { clearForm, setForm } from '../redux/formSlice';
 import { Form, Value } from '../config/Types';
 import { Config, IISMethods } from '../config/IISMethods';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
+import { clearData } from '../redux/stateSlice';
 
 interface QuestionFormControllerProps {
   pagename: string,
@@ -24,6 +25,18 @@ function QuestionFormController(props: QuestionFormControllerProps) {
   const params = useParams();
 
   const { formId } = params;
+
+  useEffect(() => {
+    // dispatch(clearForm());
+    // dispatch(clearData('formResponses'))
+
+    return () => {
+      dispatch(clearForm());
+      dispatch(clearData('formResponses'))
+    }
+
+  }, [])
+  
 
   useEffect(() => {
 
