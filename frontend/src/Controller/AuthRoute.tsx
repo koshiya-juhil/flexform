@@ -9,7 +9,7 @@ interface AuthRouteProps {
 function AuthRoute({ children } : AuthRouteProps) {
 
     const token = Cookies.get('token');
-
+    console.log("token", token);
     if(!token){
         return <Navigate to='/signin' />
     }
