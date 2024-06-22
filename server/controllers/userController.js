@@ -38,15 +38,14 @@ async function handleSignUp(req, res){
 
         setToken(res, token, user);
 
-        // const maxAge = (24 * 60 * 60 * 1000) * 31;
-        // // res.cookie("token", token.toString(), { httpOnly: true, maxAge: 900000 })
-        // res.cookie("token", token.toString(), { 
-        //     maxAge: maxAge, 
-        //     secure: true, 
-        //     sameSite: 'None',
-        //     // httpOnly: true,
-        // })
-        // res.status(200).json({user: user});
+        const maxAge = (24 * 60 * 60 * 1000) * 31;
+        res.cookie("token", token.toString(), { 
+            maxAge: maxAge, 
+        })
+        // secure: true, 
+        // sameSite: 'None',
+        // httpOnly: true,
+        res.status(200).json({user: user});
 
     } catch (error) {
         console.log(error);
@@ -95,7 +94,7 @@ async function handleClearCookie(req, res){
     try {
         const { cookieKey } = req.body;
         res.cookie(cookieKey, '', {
-            path: '/',
+            // path: '/',
             // httpOnly: true,
             expires: new Date(0),
         })
