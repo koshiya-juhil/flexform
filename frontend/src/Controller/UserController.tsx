@@ -44,12 +44,12 @@ function UserController(props : UserProps) {
 
     }
 
-    const handleSignIn = () => {
+    const handleSignIn = async () => {
         const url = Config.serverUrl + props.pagename;
         const { email, password } = state;
         const reqData = { email, password };
 
-        IISMethods.axiosRequest('post', url, reqData, {}, addSuccessCallback, addErrorCallback);
+        await IISMethods.axiosRequest('post', url, reqData, {}, addSuccessCallback, addErrorCallback);
 
         function addSuccessCallback(res: AxiosResponse): void{
             console.log(res);
