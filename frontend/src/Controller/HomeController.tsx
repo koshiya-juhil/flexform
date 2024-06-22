@@ -4,10 +4,12 @@ import { Config, IISMethods } from "../config/IISMethods";
 import { AxiosError, AxiosResponse } from "axios";
 import { useDispatch } from "react-redux";
 import { setState } from "../redux/stateSlice";
+import { useNavigate } from "react-router-dom";
 
 function HomeController() {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         listForms();
@@ -27,9 +29,18 @@ function HomeController() {
         }
     }
 
+    function handleLogout(){
+        IISMethods.clearCookie('token');
+
+        IISMethods.clearLocalStorageData('user');
+        navigate('/signin');
+    }
+
     return (
         <>
-            <Home />
+            <Home 
+                handleLogout={handleLogout}
+            />
         </>
     )
 }

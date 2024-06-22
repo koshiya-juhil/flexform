@@ -43,6 +43,69 @@ class _IISMethods {
     sessionStorage.removeItem(key);
   }
 
+  // cookie functions
+
+  /**
+   * this function clears httpOnly cookie by sending request to backend server
+   */
+  clearCookie(key: string) {
+    const url = Config.serverUrl + "clear-cookie";
+    this.axiosRequest(
+      "post",
+      url,
+      { cookieKey: key },
+      {},
+      successCallback,
+      errorCallback
+    );
+
+    function successCallback(res: AxiosResponse): void {
+      console.log(res.data);
+    }
+
+    function errorCallback(err: AxiosError | Error): void {
+      console.log(err);
+    }
+  }
+
+  // setCookieData(key: string, value: anyValue, path: string = '/'): void {
+  //   try {
+  //     const cookies = new Cookies();
+  //     cookies.set(key, value, { path: path });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
+  // getCookieData(key: string): anyValue {
+  //   const cookies = new Cookies();
+  //   return cookies.get(key);
+  // }
+
+  // clearCookieData(key: string, path: string = '/'): void {
+  //   const cookies = new Cookies();
+  //   cookies.remove(key, { path: path });
+  // }
+
+  // setCookieData(key: string, value: string, options?: object): void {
+  //   document.cookie = `${key}=${value}; ${Object.entries(options || {}).map(([k, v]) => `${k}=${v}`).join('; ')}`;
+  // }
+
+  // getCookieData(key: string): string | undefined {
+  //   const cookies = document.cookie.split(';');
+  //   for (const cookie of cookies) {
+  //     const [cookieKey, cookieValue] = cookie.trim().split('=');
+  //     if (cookieKey === key) {
+  //       return cookieValue;
+  //     }
+  //   }
+  //   return undefined;
+  // }
+
+  // clearCookieData(key: string, options?: object): void {
+  //   this.setCookieData(key, '', { ...options, expires: new Date(0) });
+  // }
+
   //  object and array methods
   getCopy<T extends object>(element: T | T[]): T | T[] {
     try {
@@ -72,14 +135,13 @@ class _IISMethods {
     }
   }
 
-  getindexfromarray(arr: AnyArray, key: string, value: anyValue): number{
+  getindexfromarray(arr: AnyArray, key: string, value: anyValue): number {
     try {
-      return arr.findIndex(o => o[key] == value);
+      return arr.findIndex((o) => o[key] == value);
     } catch (error) {
       return -1;
     }
   }
-
 
   // date and time methods
   /**
@@ -165,7 +227,7 @@ class _IISMethods {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
-          !error?.response?.data.notify && IISMethods.localnotify("Login to continue.", 0);
+          // !error?.response?.data.notify && IISMethods.localnotify("Login to continue.", 0);
           IISMethods.clearLocalStorageData("user");
           // window.location.href = '/login';
           // sessionStorage.setItem('redirectAfterLogin', window.location.pathname);

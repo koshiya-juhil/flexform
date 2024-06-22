@@ -4,6 +4,7 @@ import FormPage from "./view/form/FormPage";
 import UserController from "./Controller/UserController";
 import HomeController from "./Controller/HomeController";
 import ResponseController from "./Controller/ResponseController";
+import AuthRoute from "./Controller/AuthRoute";
 
 export default function Router(){
     
@@ -12,25 +13,33 @@ export default function Router(){
             <>
                 <Route 
                     path="/" 
-                    element={<HomeController />} 
+                    element={
+                        <AuthRoute>
+                            <HomeController />
+                        </AuthRoute>
+                    } 
                     errorElement={<ErrorNotFound />}
                 ></Route>
 
                 <Route 
                     path="form/response/:formId"
-                    element={<ResponseController />} 
+                    element={<ResponseController />}
                 ></Route>
 
                 <Route 
                     path="form/new"
                     element={
-                        <FormPage/>
+                        <AuthRoute>
+                            <FormPage/>
+                        </AuthRoute>
                     }
                 ></Route>
                 <Route 
                     path="form/edit/:formId"
                     element={
-                        <FormPage/>
+                        <AuthRoute>
+                            <FormPage/>
+                        </AuthRoute>
                     }
                 ></Route>
 

@@ -1,6 +1,24 @@
 const User = require('../models/User');
 const { generateToken } = require('../services/auth');
 
+async function setToken(res, token, user){
+    try {
+        const maxAge = (24 * 60 * 60 * 1000) * 31;
+        // res.cookie("token", token.toString(), { httpOnly: true, maxAge: 900000 })
+        res.cookie("token", token.toString(), { 
+            maxAge: maxAge, 
+            secure: true, 
+            sameSite: 'None',
+            // httpOnly: true,
+        })
+        res.status(200).json({user: user});
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Internal Server Error", notify: true });
+    }
+}
+
 async function handleSignUp(req, res){
     try {
         const data = req.body;
@@ -18,10 +36,17 @@ async function handleSignUp(req, res){
         let user = JSON.parse(JSON.stringify(response));
         delete user.password;
 
-        const maxAge = (24 * 60 * 60 * 1000) * 31;
-        // res.cookie("token", token.toString(), { httpOnly: true, maxAge: 900000 })
-        res.cookie("token", token.toString(), { maxAge: maxAge, httpOnly: true, secure: true, sameSite: 'None' })
-        res.status(200).json({user: user});
+        setToken(res, token, user);
+
+        // const maxAge = (24 * 60 * 60 * 1000) * 31;
+        // // res.cookie("token", token.toString(), { httpOnly: true, maxAge: 900000 })
+        // res.cookie("token", token.toString(), { 
+        //     maxAge: maxAge, 
+        //     secure: true, 
+        //     sameSite: 'None',
+        //     // httpOnly: true,
+        // })
+        // res.status(200).json({user: user});
 
     } catch (error) {
         console.log(error);
@@ -46,11 +71,18 @@ async function handleSignIn(req, res){
 
         let temp = JSON.parse(JSON.stringify(user));
         delete temp.password;
+
+        setToken(res, token, temp);
         
-        const maxAge = (24 * 60 * 60 * 1000) * 31;
-        res.cookie("token", token.toString(), { maxAge: maxAge, httpOnly: true, secure: true, sameSite: 'None' })
-        res.status(200).json({user: temp});
-        // res.cookie("token", token.toString()).json({user: temp});
+        // const maxAge = (24 * 60 * 60 * 1000) * 31;
+        // res.cookie("token", token.toString(), { 
+        //     maxAge: maxAge, 
+        //     secure: true, 
+        //     sameSite: 'None',
+        //     // httpOnly: true, 
+        // });
+
+        // res.status(200).json({user: temp});
 
     } catch (error) {
         console.log(error);
@@ -58,4 +90,20 @@ async function handleSignIn(req, res){
     }
 }
 
-module.exports = { handleSignUp, handleSignIn };
+// this function is used for clear cookie that are stored as http-Only
+async function handleClearCookie(req, res){
+    try {
+        const { cookieKey } = req.body;
+        res.cookie(cookieKey, '', {
+            path: '/',
+            // httpOnly: true,
+            expires: new Date(0),
+        })
+        res.status(200).json({ message: "HTTP-only cookie cleared" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal Server Error', notify: true });
+    }
+}
+
+module.exports = { handleSignUp, handleSignIn, handleClearCookie };
