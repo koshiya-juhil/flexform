@@ -7,7 +7,7 @@ async function setToken(res, token, user){
         // res.cookie("token", token.toString(), { httpOnly: true, maxAge: 900000 })
         res.cookie("token", token.toString(), { 
             maxAge: maxAge, 
-            secure: true, 
+            // secure: true, 
             // sameSite: 'None',
             // httpOnly: true,
         })
