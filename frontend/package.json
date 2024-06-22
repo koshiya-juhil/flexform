@@ -16,6 +16,7 @@
     "@mui/material": "^5.15.19",
     "@mui/system": "^5.15.15",
     "@reduxjs/toolkit": "^2.2.5",
+    "@types/js-cookie": "^3.0.6",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.7.2",
     "js-cookie": "^3.0.5",
@@ -28,7 +29,6 @@
     "react-toastify": "^10.0.5"
   },
   "devDependencies": {
-    "@types/js-cookie": "^3.0.6",
     "@types/lodash.debounce": "^4.0.9",
     "@types/react": "^18.2.66",
     "@types/react-copy-to-clipboard": "^5.0.7",

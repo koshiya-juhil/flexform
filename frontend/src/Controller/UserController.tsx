@@ -5,6 +5,7 @@ import { Config, IISMethods } from "../config/IISMethods";
 import { GenericObjectType } from "../config/Types";
 import { AxiosError, AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 interface UserProps {
     pagename: string;
@@ -49,17 +50,19 @@ function UserController(props : UserProps) {
         const { email, password } = state;
         const reqData = { email, password };
 
-        await IISMethods.axiosRequest('post', url, reqData, {}, addSuccessCallback, addErrorCallback);
+        IISMethods.axiosRequest('post', url, reqData, {}, addSuccessCallback, addErrorCallback);
 
         function addSuccessCallback(res: AxiosResponse): void{
-            console.log(res);
             IISMethods.setLocalStorageData('user', res.data.user);
+            console.log("Ttttttt", Cookies.get('token'));
             navigate('/');
         }
 
         function addErrorCallback(err: AxiosError | Error): void{
             console.log(err);
         }
+
+        console.log("after");
 
     }
 
