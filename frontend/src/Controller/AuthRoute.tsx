@@ -10,6 +10,7 @@ function AuthRoute({ children } : AuthRouteProps) {
 
     const token = Cookies.get('token');
     console.log("token", token);
+    console.log("document.cookie", document.cookie);
     if(!token){
         return <Navigate to='/signin' />
     }

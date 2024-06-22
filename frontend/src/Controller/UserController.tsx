@@ -55,6 +55,7 @@ function UserController(props : UserProps) {
         function addSuccessCallback(res: AxiosResponse): void{
             IISMethods.setLocalStorageData('user', res.data.user);
             console.log("Ttttttt", Cookies.get('token'));
+            console.log("document.cookie", document.cookie);
             navigate('/');
         }
 
