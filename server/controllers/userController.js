@@ -36,7 +36,7 @@ async function handleSignUp(req, res){
         let user = JSON.parse(JSON.stringify(response));
         delete user.password;
 
-        setToken(res, token, user);
+        // setToken(res, token, user);
 
         const maxAge = (24 * 60 * 60 * 1000) * 31;
         res.cookie("token", token.toString(), { 
@@ -71,17 +71,17 @@ async function handleSignIn(req, res){
         let temp = JSON.parse(JSON.stringify(user));
         delete temp.password;
 
-        setToken(res, token, temp);
+        // setToken(res, token, temp);
         
-        // const maxAge = (24 * 60 * 60 * 1000) * 31;
-        // res.cookie("token", token.toString(), { 
-        //     maxAge: maxAge, 
-        //     secure: true, 
-        //     sameSite: 'None',
-        //     // httpOnly: true, 
-        // });
+        const maxAge = (24 * 60 * 60 * 1000) * 31;
+        res.cookie("token", token.toString(), { 
+            maxAge: maxAge, 
+            secure: true, 
+            sameSite: 'None',
+            // httpOnly: true, 
+        });
 
-        // res.status(200).json({user: temp});
+        res.status(200).json({user: temp});
 
     } catch (error) {
         console.log(error);
