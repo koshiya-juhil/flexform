@@ -41,9 +41,9 @@ async function handleSignUp(req, res){
         const maxAge = (24 * 60 * 60 * 1000) * 31;
         res.cookie("token", token.toString(), { 
             maxAge: maxAge, 
+            sameSite: 'None',
         })
         // secure: true, 
-        // sameSite: 'None',
         // httpOnly: true,
         res.status(200).json({user: user});
 
