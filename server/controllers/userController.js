@@ -78,8 +78,8 @@ async function handleSignIn(req, res){
             maxAge: maxAge, 
             secure: true, 
             sameSite: 'None',
-            // httpOnly: true, 
         });
+        // httpOnly: true, 
 
         res.status(200).json({user: temp});
 
