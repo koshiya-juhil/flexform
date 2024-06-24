@@ -43,7 +43,7 @@ function QuestionForm(props: QuestionFormProps) {
 
     const form = useSelector((store: RootState) => store.form);
     const state = useSelector((store: RootState) => store.state);
-    const paymentDetailsMasterJson: FormField[] = state.paymentFormMasterJson;
+    const paymentDetailsMasterJson: {formfields: FormField[]} = state.paymentFormMasterJson;
     const [acceptPayment, setAcceptPayment] = useState<boolean>(form.paymentDetails.price ? true : false);
 
     function handleOpenQuestion(index: number) {

@@ -9,7 +9,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { clearData, setState } from '../redux/stateSlice';
-import { FormField } from '../view/MastersJson';
+// import { FormField } from '../view/MastersJson';
 
 interface QuestionFormControllerProps {
   pagename: string,
@@ -62,18 +62,21 @@ function QuestionFormController(props: QuestionFormControllerProps) {
   }
 
   const setPaymentFormData = () => {
-    const tempPaymentFormMasterJson = state.paymentFormMasterJson;
-    tempPaymentFormMasterJson.formfields.map((fieldObj : FormField) => {
-      if(fieldObj.dependentrequired != undefined){
-        fieldObj.dependentrequired.fields.map((field: string) => {
-          const index = IISMethods.getindexfromarray(tempPaymentFormMasterJson.formfields, 'field', field);
-          const val = form.paymentDetails[fieldObj.dependentrequired.onvalue];
-          tempPaymentFormMasterJson.formfields[index].required = val === fieldObj.dependentrequired.onvalue ? true : false;
-        })
-      }
-    })
+    // temporary comment
+    // const tempPaymentFormMasterJson = IISMethods.getCopy(state.paymentFormMasterJson);
+    // tempPaymentFormMasterJson.formfields.forEach((fieldObj : FormField) => {
+    //   if(fieldObj.dependentrequired){
+    //     fieldObj.dependentrequired.fields.forEach((field: string) => {
+    //       const index = IISMethods.getindexfromarray(tempPaymentFormMasterJson.formfields, 'field', field);
+    //       if(index != -1){
+    //         const val = form.paymentDetails[fieldObj.dependentrequired.onvalue];
+    //         tempPaymentFormMasterJson.formfields[index].required = val === fieldObj.dependentrequired.onvalue ? true : false;
+    //       }
+    //     })
+    //   }
+    // })
 
-    dispatch(setState({ paymentFormMasterJson: tempPaymentFormMasterJson }));
+    // dispatch(setState({ paymentFormMasterJson: tempPaymentFormMasterJson }));
   }
 
   const handleForm: (key: string, value: Value, key2?: string) => void = (key, value, key2 = '') => {
@@ -90,7 +93,9 @@ function QuestionFormController(props: QuestionFormControllerProps) {
       if (fieldObj.dependentrequired) {
         fieldObj.dependentrequired.fields.map((field: string) => {
           const index = IISMethods.getindexfromarray(tempPaymentFormMasterJson.formfields, 'field', field);
-          tempPaymentFormMasterJson.formfields[index].required = value === fieldObj.dependentrequired.onvalue ? true : false;
+          if(index != -1){
+            tempPaymentFormMasterJson.formfields[index].required = value === fieldObj.dependentrequired.onvalue ? true : false;
+          }
         })
         dispatch(setState({ paymentFormMasterJson: tempPaymentFormMasterJson }));
       }

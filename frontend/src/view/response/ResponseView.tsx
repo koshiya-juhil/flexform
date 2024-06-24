@@ -1,7 +1,7 @@
 import { purple } from "@mui/material/colors";
 import { RootState } from "../../redux/store"
 import { useSelector } from "react-redux";
-import { Checkbox, FormControlLabel, Radio, RadioGroup, Switch, styled } from "@mui/material";
+import { Checkbox, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { IISMethods } from "../../config/IISMethods";
 import { AnyArray, anyValue } from "../../config/Types";
 import { useEffect, useState } from "react";
@@ -10,15 +10,6 @@ import { PurpleSwitch } from "../components/styleComponents";
 interface ResponseViewProps {
     handleUpdateForm: () => void;
 }
-
-// const PurpleSwitch = styled(Switch)(() => ({
-//     '& .MuiSwitch-switchBase.Mui-checked': {
-//       color: purple[800],
-//     },
-//     '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-//       backgroundColor: purple[800],
-//     },
-//   }));
 
 function ResponseView(props: ResponseViewProps) {
 
