@@ -24,7 +24,7 @@ function HomeController() {
         IISMethods.axiosRequest('get', url, {}, {}, listSuccessCallback, listErrorCallback);
 
         function listSuccessCallback(res: AxiosResponse): void{
-            dispatch(setState({ myForms: res.data }));
+            dispatch(setState({ myForms: res.data.response }));
         }
 
         function listErrorCallback(err: AxiosError | Error): void{
@@ -47,7 +47,6 @@ function HomeController() {
     }
 
     function getSearchData(value: string = ''){
-        console.log("getSearchData......", value);
 
         if(!value.length){
             listForms();
@@ -58,8 +57,7 @@ function HomeController() {
         IISMethods.axiosRequest('get', url, {}, {}, successCallback, errorCallback);
 
         function successCallback(res: AxiosResponse){
-            console.log("res", res.data);
-            dispatch(setState({ myForms: res.data }));
+            dispatch(setState({ myForms: res.data.response }));
         }
 
         function errorCallback(error: AxiosError | Error){

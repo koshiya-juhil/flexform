@@ -29,8 +29,7 @@ function ResponseTabController() {
     IISMethods.axiosRequest('get', url, {}, {}, SuccessCallback, ErrorCallback);
 
     function SuccessCallback(res: AxiosResponse) {
-      console.log(res.data);
-      dispatch(setState({ formResponses: res.data }));
+      dispatch(setState({ formResponses: res.data.responses }));
     }
 
     function ErrorCallback(error: AxiosError | Error) {
@@ -46,10 +45,7 @@ function ResponseTabController() {
     IISMethods.axiosRequest('put', url, reqData, {}, SuccessCallback, ErrorCallback);
 
     function SuccessCallback(res: AxiosResponse): void {
-      console.log(res.data);
-      dispatch(setForm(res.data));
-
-      console.log("formData", formData);
+      dispatch(setForm(res.data.response));
     }
 
     function ErrorCallback(err: AxiosError | Error): void {

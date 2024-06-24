@@ -7,6 +7,7 @@ const { checkForAuthentication } = require('./middlewares/authMiddleware');
 
 const userRoutes = require('./routes/userRoute')
 const formRoutes = require('./routes/formRoute');
+const { paymentSession } = require('./controllers/stripePaymentController');
 
 require('dotenv').config();
 const PORT = process.env.PORT || 8000;
@@ -51,6 +52,8 @@ app.get("/health", (req, res) => {
 
 app.use('/', userRoutes);
 app.use('/form', formRoutes);
+
+app.post('/api/stripe-checkout-session', paymentSession);
 
 app.listen(PORT, () => {
     console.log(`Server started on port: ${PORT}`)

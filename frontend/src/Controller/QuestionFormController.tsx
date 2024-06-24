@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { clearForm, setForm } from '../redux/formSlice';
 import { Form, Value } from '../config/Types';
-import { Config, IISMethods } from '../config/IISMethods';
+import { Config, IISMethods, JsCall } from '../config/IISMethods';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { clearData } from '../redux/stateSlice';
+import { clearData, setState } from '../redux/stateSlice';
+import { FormField } from '../view/MastersJson';
 
 interface QuestionFormControllerProps {
   pagename: string,
@@ -19,7 +20,8 @@ function QuestionFormController(props: QuestionFormControllerProps) {
 
   const navigate = useNavigate();
 
-  const form: Form = useSelector((state: RootState) => state.form);
+  const form: Form = useSelector((store: RootState) => store.form);
+  const state = useSelector((store: RootState) => store.state);
   const dispatch = useDispatch();
 
   const params = useParams();
@@ -36,11 +38,10 @@ function QuestionFormController(props: QuestionFormControllerProps) {
     }
 
   }, [])
-  
+
 
   useEffect(() => {
-
-    if(formId != undefined && formId?.length && form._id != formId){
+    if (formId != undefined && formId?.length && form._id != formId) {
       getFormById();
     }
 
@@ -52,8 +53,7 @@ function QuestionFormController(props: QuestionFormControllerProps) {
     await IISMethods.axiosRequest('get', url, {}, {}, SuccessCallback, ErrorCallback);
 
     function SuccessCallback(res: AxiosResponse): void {
-      console.log(res.data);
-      dispatch(setForm(res.data));
+      dispatch(setForm(res.data.response));
     }
 
     function ErrorCallback(err: AxiosError | Error): void {
@@ -61,13 +61,42 @@ function QuestionFormController(props: QuestionFormControllerProps) {
     }
   }
 
+  const setPaymentFormData = () => {
+    const tempPaymentFormMasterJson = state.paymentFormMasterJson;
+    tempPaymentFormMasterJson.formfields.map((fieldObj : FormField) => {
+      if(fieldObj.dependentrequired != undefined){
+        fieldObj.dependentrequired.fields.map((field: string) => {
+          const index = IISMethods.getindexfromarray(tempPaymentFormMasterJson.formfields, 'field', field);
+          const val = form.paymentDetails[fieldObj.dependentrequired.onvalue];
+          tempPaymentFormMasterJson.formfields[index].required = val === fieldObj.dependentrequired.onvalue ? true : false;
+        })
+      }
+    })
 
+    dispatch(setState({ paymentFormMasterJson: tempPaymentFormMasterJson }));
+  }
 
-  const handleForm: (key: string, value: Value) => void = (key, value) => {
+  const handleForm: (key: string, value: Value, key2?: string) => void = (key, value, key2 = '') => {
     const temp = JSON.parse(JSON.stringify(form));
 
-    if (key == 'title' || key == 'description') {
+    if (key === 'title' || key === 'description') {
       temp[key] = value;
+    }
+    else if (key === 'paymentDetails') {
+      temp[key][key2] = value;
+
+      const tempPaymentFormMasterJson = state.paymentFormMasterJson;
+      const fieldObj = IISMethods.getobjectfromarray(tempPaymentFormMasterJson.formfields, 'field', key2);
+      if (fieldObj.dependentrequired) {
+        fieldObj.dependentrequired.fields.map((field: string) => {
+          const index = IISMethods.getindexfromarray(tempPaymentFormMasterJson.formfields, 'field', field);
+          tempPaymentFormMasterJson.formfields[index].required = value === fieldObj.dependentrequired.onvalue ? true : false;
+        })
+        dispatch(setState({ paymentFormMasterJson: tempPaymentFormMasterJson }));
+      }
+
+      JsCall.validateForm(temp[key], state.paymentFormMasterJson.formfields, key2, 'payment', true);
+
     }
 
     dispatch(setForm(temp));
@@ -118,17 +147,21 @@ function QuestionFormController(props: QuestionFormControllerProps) {
   }
 
   const handleSave = () => {
+
+    if (JsCall.validateForm(form.paymentDetails, state.paymentFormMasterJson.formfields, undefined, 'payment', true)) {
+      IISMethods.localnotify("Fill all required data", 2);
+      return;
+    }
+
     const url = Config.serverUrl + props.pagename + '/add';
     const reqData = IISMethods.getCopy(form);
 
     IISMethods.axiosRequest('post', url, reqData, {}, addSuccessCallback, addErrorCallback);
 
     function addSuccessCallback(res: AxiosResponse): void {
-      console.log(res.data);
-      dispatch(setForm(res.data));
+      dispatch(setForm(res.data.response));
 
-      console.log("form", form);
-      navigate(`/form/edit/${res.data._id}`)
+      navigate(`/form/edit/${res.data.response._id}`)
     }
 
     function addErrorCallback(err: AxiosError | Error): void {
@@ -138,16 +171,23 @@ function QuestionFormController(props: QuestionFormControllerProps) {
   }
 
   const handleUpdate = () => {
+
+    console.log('form',form.paymentDetails)
+
+    console.log(JsCall.validateForm(form.paymentDetails, state.paymentFormMasterJson.formfields, undefined, 'payment', true))
+
+    if (JsCall.validateForm(form.paymentDetails, state.paymentFormMasterJson.formfields, undefined, 'payment', true)) {
+      IISMethods.localnotify("Fill all required data", 2);
+      return;
+    }
+
     const url = Config.serverUrl + props.pagename + '/update';
     const reqData = IISMethods.getCopy(form);
 
     IISMethods.axiosRequest('put', url, reqData, {}, SuccessCallback, ErrorCallback)
 
     function SuccessCallback(res: AxiosResponse): void {
-      console.log(res.data);
-      dispatch(setForm(res.data));
-
-      console.log("form", form);
+      dispatch(setForm(res.data.response));
     }
 
     function ErrorCallback(err: AxiosError | Error): void {
@@ -164,6 +204,7 @@ function QuestionFormController(props: QuestionFormControllerProps) {
         handleUpdate={handleUpdate}
         formData={form}
         mode={props.mode}
+        setPaymentFormData={setPaymentFormData}
       />
     </>
   )

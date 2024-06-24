@@ -3,13 +3,13 @@ export type Value = string | number | boolean;
 export type Option = { label: string; value?: string; _id?: string };
 
 export type FormField = {
-  // [key: string]: any;
+  [key: string]: anyValue;
   _id?: string;
   text: string;
   description?: string;
   type: string;
-  // disabled?: boolean;
-  // defaultvisibility?: boolean;
+  disabled?: boolean;
+  defaultvisibility?: boolean;
   required: boolean;
   options: Option[];
 };
@@ -23,6 +23,7 @@ export interface Form {
   createdAt?: string;
   updatedAt?: string;
   isActive?: boolean;
+  paymentDetails: Record<string, any>;
 }
 
 export interface AppState {

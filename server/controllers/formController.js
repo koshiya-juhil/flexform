@@ -9,8 +9,7 @@ async function createForm(req, res){
         const newForm = new Form({...data, createdBy});
         let response = await newForm.save();
 
-
-        res.status(200).send(response);
+        res.status(200).json({response: response, notify: true, message: "Form created successfully"});
 
     } catch (error) {
         console.log(error);
@@ -23,6 +22,8 @@ async function updateForm(req, res){
         const data = req.body;
         const formId = data._id;
 
+        console.log(req.body);
+
         const updatedForm = await Form.findByIdAndUpdate(
             formId,
             data,
@@ -33,8 +34,7 @@ async function updateForm(req, res){
             return res.status(404).json({ error: "Form not found", notify: true });
         }
 
-
-        res.status(200).send(updatedForm);
+        res.status(200).json({response: updatedForm, notify: true, message: 'Form updated successfully'});
         
     } catch (error) {
         console.log(error);
@@ -48,7 +48,7 @@ async function getFormsByUser(req, res) {
         const forms = await Form.find({ createdBy: user.id })
         console.log("forms", forms.length);
         
-        res.status(200).send(forms);
+        res.status(200).json({ response: forms});
 
     } catch (error) {
         console.log("error", error);
@@ -65,13 +65,12 @@ async function getFormById(req, res){
         }
 
         const response = await Form.findById(formId);
-
         
         if(!response){
             return res.status(404).json({ error: "Form not found", notify: true });
         }
 
-        res.status(200).send(response);
+        res.status(200).json({response: response});
         
     } catch (error) {
         console.log(error);
@@ -85,7 +84,7 @@ async function getFormsByTitle(req, res){
         const searchQuery = req.params.query;
         const forms = await Form.find({ title: { $regex: searchQuery, $options: 'i' } });
 
-        res.status(200).send(forms);
+        res.status(200).json({ response: forms});
         
     } catch (error) {
         console.log(error);

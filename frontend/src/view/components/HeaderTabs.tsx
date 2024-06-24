@@ -23,6 +23,7 @@ import { formtab } from "../../config/Types"
 interface HeaderTabsProps {
     formTab: formtab;
     setFormTab: React.Dispatch<React.SetStateAction<formtab>>;
+    mode: string;
 }
 
 function HeaderTabs(props: HeaderTabsProps) {
@@ -45,7 +46,7 @@ function HeaderTabs(props: HeaderTabsProps) {
                 // }}
             >
                 <Tab label="Questions" id="questions" value="questions" className="tab"></Tab>
-                <Tab label="Responses" id="responses" value="responses" className="tab"></Tab>
+                {props.mode === 'edit' && <Tab label="Responses" id="responses" value="responses" className="tab"></Tab>}
             </Tabs>
         </Paper>
     )

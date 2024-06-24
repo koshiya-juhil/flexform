@@ -6,10 +6,6 @@ async function addResponse(req, res){
         
         const { formId, responses, submittedBy } = req.body;
 
-        console.log("formId", formId);
-        console.log("responses", responses);
-        console.log("submittedBy", submittedBy);
-
         if(!isValidObjectId(formId)){
             return res.status(400).json({ error: "Invalid formId", notify: true });
         }
@@ -21,8 +17,6 @@ async function addResponse(req, res){
         });
 
         const response = await newResponse.save();
-
-        console.log("response ", response);
 
         res.status(200).json({response, notify: true, message: "Response submitted successfully."});
 
@@ -43,7 +37,7 @@ async function responsesByFormId(req, res){
 
         const responses = await Response.find({ formId: formId }).exec();
 
-        res.status(200).json(responses);
+        res.status(200).json({responses: responses});
 
     } catch (error) {
         console.log(error);

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Form } from "../config/Types";
+import type { Form } from "../config/Types";
 
 const initialState: Form = {
   title: "Untitled form",
@@ -11,6 +11,13 @@ const initialState: Form = {
     required: false,
     options: [],
   }],
+  paymentDetails: {
+    title: '',
+    stripe_publishable_key: '',
+    stripe_secret_key: '',
+    currency: '',
+    price: 0
+  },
   createdBy: "",
 };
 
@@ -20,6 +27,9 @@ const formSlice = createSlice({
   reducers: {
     setForm(_, action: PayloadAction<Form>) {
       return action.payload;
+    },
+    clearPaymentDetail(state){
+      state.paymentDetails = initialState.paymentDetails;
     },
     clearForm(){
       return initialState;
@@ -49,6 +59,7 @@ const formSlice = createSlice({
 export const {
   setForm,
   clearForm,
+  clearPaymentDetail,
   // updateForm,
   // addFormField,
   // updateFormField,

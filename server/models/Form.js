@@ -24,6 +24,17 @@ const formSchema = new mongoose.Schema({
         ],
       },
     ],
+    paymentDetails: {
+      required: { type: Boolean, default: false },
+      title: { type: String },
+      stripe_publishable_key: { type: String },
+      stripe_secret_key: { type: String },
+      payment_mode: { type: String },
+      interval: { type: String },
+      interval_count: { type: Number },
+      price: { type: Number },
+      currency: { type: String }
+    },
     createdBy: {
       type: mongoose.Schema.ObjectId,
       ref: "Users",

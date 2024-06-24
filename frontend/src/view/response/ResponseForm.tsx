@@ -9,6 +9,7 @@ interface ResponseFormProps {
     handleFormData: (type: string, key: number | string, value: string | number | boolean, index?: number) => void;
     submitResponse: () => void;
     setDefaultFormData: () => void;
+    makePayment: () => void;
     responseSubmitted: boolean;
     formname: string;
 }
@@ -146,6 +147,15 @@ function ResponseForm(props: ResponseFormProps) {
 
                                     </div>
                                 ))}
+
+                                {/* Payment btn */}
+                                <div className="form-group rounded-lg flex flex-col w-full my-3">
+                                    <button className="px-5 py-2  bg-purple-800 text-white text-sm rounded-md font-semibold hover:bg-purple-800/[0.8] hover:shadow-lg"
+                                        onClick={() => props.makePayment()}
+                                    >
+                                        Make Payment
+                                    </button>
+                                </div>
 
                                 <div className="flex justify-between">
                                     <button onClick={() => props.submitResponse()} className="px-5 py-2  bg-purple-800 text-white text-sm rounded-md font-semibold hover:bg-purple-800/[0.8] hover:shadow-lg">Submit</button>

@@ -222,6 +222,7 @@ class _IISMethods {
       });
 
       if (response.data.notify) {
+        console.log("response.data", response.data);
         IISMethods.localnotify(response.data.message, 1);
       }
 

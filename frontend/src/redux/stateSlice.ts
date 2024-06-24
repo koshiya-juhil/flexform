@@ -5,6 +5,7 @@ const initialState: GenericObjectType = {
     responseFormData: {},
     myForms: [],
     formResponses: [],
+    paymentFormMasterJson: []
 };
 
 const stateSlice = createSlice({

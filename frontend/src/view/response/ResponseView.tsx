@@ -5,19 +5,20 @@ import { Checkbox, FormControlLabel, Radio, RadioGroup, Switch, styled } from "@
 import { IISMethods } from "../../config/IISMethods";
 import { AnyArray, anyValue } from "../../config/Types";
 import { useEffect, useState } from "react";
+import { PurpleSwitch } from "../components/styleComponents";
 
 interface ResponseViewProps {
     handleUpdateForm: () => void;
 }
 
-const PurpleSwitch = styled(Switch)(() => ({
-    '& .MuiSwitch-switchBase.Mui-checked': {
-      color: purple[800],
-    },
-    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-      backgroundColor: purple[800],
-    },
-  }));
+// const PurpleSwitch = styled(Switch)(() => ({
+//     '& .MuiSwitch-switchBase.Mui-checked': {
+//       color: purple[800],
+//     },
+//     '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+//       backgroundColor: purple[800],
+//     },
+//   }));
 
 function ResponseView(props: ResponseViewProps) {
 
@@ -38,7 +39,6 @@ function ResponseView(props: ResponseViewProps) {
 
     function generateResponseData(){
         const responses = formResponse.responses;
-        console.log("Function called", responses);
 
         const tempArr: AnyArray = [];
 
@@ -64,7 +64,6 @@ function ResponseView(props: ResponseViewProps) {
         setResponseFormData(tempArr);
     }
     
-    console.log("responseFormData", responseFormData)
 
     return (
         <div className="bg-slate-100 h-full mt-3">

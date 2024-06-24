@@ -1,15 +1,19 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { Accordion, AccordionDetails, AccordionSummary, Button, FormControlLabel, IconButton, Menu, MenuItem, Select, Switch } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Button, FormControl, FormControlLabel, IconButton, InputLabel, Menu, MenuItem, Select, Switch } from "@mui/material";
 import { AddCircle, ArrowDropDownCircleOutlined, Check, CheckBox, Close, DeleteOutline, FilterNone, MoreVert, RadioButtonChecked, ShortText, Subject } from "@mui/icons-material";
 import { Value } from "../../config/Types";
+import { PurpleSwitch } from "../components/styleComponents";
+import { FormField } from "../MastersJson";
+import { clearPaymentDetail } from "../../redux/formSlice";
 
 interface QuestionFormProps {
-    handleForm: (key: string, value: Value) => void;
+    handleForm: (key: string, value: Value, key2?: string) => void;
     handleField: (key: string, value: Value, index: number, action?: string, optionIndex?: number) => void;
     handleSave: () => void;
     handleUpdate: () => void;
+    setPaymentFormData: () => void;
     mode: string;
 }
 
@@ -32,11 +36,15 @@ const options: questionOption = [
 ]
 
 function QuestionForm(props: QuestionFormProps) {
+    const dispatch = useDispatch();
     const [openQuestion, setOpenQuestion] = useState<number | null>(null);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null); // for open question footer dropdown
     const [questionOptions, setQuestionOptions] = useState<optionValue[]>([]);
 
-    const form = useSelector((state: RootState) => state.form);
+    const form = useSelector((store: RootState) => store.form);
+    const state = useSelector((store: RootState) => store.state);
+    const paymentDetailsMasterJson: FormField[] = state.paymentFormMasterJson;
+    const [acceptPayment, setAcceptPayment] = useState<boolean>(form.paymentDetails.price ? true : false);
 
     function handleOpenQuestion(index: number) {
         if (openQuestion == index) {
@@ -58,10 +66,10 @@ function QuestionForm(props: QuestionFormProps) {
 
     const handleQuestionOptions: (value: optionValue, fieldIndex?: number) => void = (value, fieldIndex) => {
         let copyOptions = [...questionOptions];
-        if(copyOptions.includes(value)){
+        if (copyOptions.includes(value)) {
             copyOptions = copyOptions.filter(i => i != value);
 
-            if(value === 'description'){
+            if (value === 'description') {
                 props.handleField('description', '', Number(fieldIndex));
             }
         }
@@ -85,9 +93,13 @@ function QuestionForm(props: QuestionFormProps) {
                                 value={form.title}
                                 onChange={(e) => props.handleForm('title', e.target.value)}
                             />
-                            <input type="text" placeholder="Form Description" className="question_form_top_desc* box-border mt-2.5 text-sm font-normal leading-10 w-full border-none outline-none border-b-slate-100 text-black h-5"
+                            <textarea placeholder="Form Description" className="box-border mt-2.5 text-sm font-normal leading-6 w-full border-none outline-none resize-none overflow-hidden border-b-slate-100 text-black h-5"
                                 value={form.description}
                                 onChange={(e) => props.handleForm('description', e.target.value)}
+                                onInput={(e) => {
+                                    e.currentTarget.style.height = '';
+                                    e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
+                                }}
                             />
                         </div>
                     </div>
@@ -122,14 +134,14 @@ function QuestionForm(props: QuestionFormProps) {
                                         </div>
 
                                         {/* description */}
-                                        {questionOptions.includes('description') ? 
+                                        {questionOptions.includes('description') ?
                                             <div className="mt-2">
                                                 <input type="text" placeholder="Description" className="box-border text-base leading-10 w-full outline-none border-b-2 border-b-gray-600 h-9 focus:border-b-purple-800"
                                                     value={formfield?.description}
                                                     onChange={(e) => props.handleField('description', e.target.value, index)}
                                                 />
                                             </div>
-                                        : <></>}
+                                            : <></>}
                                     </div>
 
                                     {/* Options */}
@@ -183,7 +195,7 @@ function QuestionForm(props: QuestionFormProps) {
                                                     aria-controls={open ? 'long-menu' : undefined}
                                                     aria-expanded={open ? 'true' : undefined}
                                                     aria-haspopup="true"
-                                                    onClick={handleClickQuestionOptions}                                            
+                                                    onClick={handleClickQuestionOptions}
                                                 ><MoreVert /></IconButton>
                                                 <Menu
                                                     id="long-menu"
@@ -193,18 +205,18 @@ function QuestionForm(props: QuestionFormProps) {
                                                     anchorEl={anchorEl}
                                                     open={open}
                                                     onClose={handleCloseQuestionOptions}
-                                                    // PaperProps={{
-                                                    //     style: {
-                                                    //         // maxHeight: ITEM_HEIGHT * 4.5,
-                                                    //         width: '20ch',
-                                                    //     },
-                                                    // }}
+                                                // PaperProps={{
+                                                //     style: {
+                                                //         // maxHeight: ITEM_HEIGHT * 4.5,
+                                                //         width: '20ch',
+                                                //     },
+                                                // }}
                                                 >
                                                     {options.map((option, i) => {
                                                         const selected = questionOptions.includes(option.value);
                                                         return (
                                                             <MenuItem key={i} selected={selected} onClick={() => handleQuestionOptions(option.value, index)} className={`${selected ? '!pl-0' : '!pl-8'}`}>
-                                                                {selected && <Check className='mx-1' />} 
+                                                                {selected && <Check className='mx-1' />}
                                                                 {option.label}
                                                             </MenuItem>
                                                         )
@@ -219,11 +231,102 @@ function QuestionForm(props: QuestionFormProps) {
                         </Accordion>
                     ))}
 
+                    <div className="form-group rounded-lg flex flex-col w-full my-3">
+                        <button className="px-5 py-2  bg-purple-800 text-white text-sm rounded-md font-semibold hover:bg-purple-800/[0.8] hover:shadow-lg"
+                            onClick={() => {
+                                console.log("acceptPayment", acceptPayment);
+                                if (acceptPayment) {
+                                    dispatch(clearPaymentDetail());
+                                }
+                                props.setPaymentFormData();
+                                setAcceptPayment(!acceptPayment)
+                            }}
+                        >
+                            {acceptPayment ? 'Remove' : 'Accept'} payment
+                        </button>
+                    </div>
+
+                    {/* payment method field */}
+                    {acceptPayment ?
+                        <div>
+                            <Accordion className={`my-2 !rounded`} expanded={true}>
+                                <AccordionSummary>
+                                    <span className="font-semibold">Payment Details</span>
+                                </AccordionSummary>
+
+                                <div className="flex flex-row justify-between">
+                                    <AccordionDetails className="bg-white rounded-lg py-6 px-6 capitalize flex flex-col pt-0 w-full ml-2.5">
+                                        {paymentDetailsMasterJson.formfields.filter((formfield: FormField) => {
+                                            try {
+                                                return formfield.defaultvisibility || (formfield.condition && form.paymentDetails[formfield.condition?.field] === formfield.condition?.onvalue);
+                                            } catch (error) {
+                                                return false;
+                                            }
+                                        }).map((formfield: FormField, index: number) => (
+                                            <div className="form-group my-3">
+                                                {formfield.type === 'text' ?
+                                                    <div>
+                                                        <label>{formfield.text} {formfield.required ? <span className="text-red-700"> * </span> : <></>}</label>
+                                                        <input type="text" key={index} placeholder={formfield.text} className="bg-gray-100 !text-black pl-3 box-border text-base leading-10 w-full outline-none border-b-2 border-b-gray-600 h-12 focus:border-b-purple-800"
+                                                            id={`payment-${formfield.field}`}
+                                                            value={form.paymentDetails[formfield.field] || ''}
+                                                            onChange={(e) => props.handleForm('paymentDetails', e.target.value, formfield.field)}
+                                                        />
+                                                    </div>
+                                                    : formfield.type === 'number' ?
+                                                        <>
+                                                            <div>
+                                                                <label>{formfield.text} {formfield.required ? <span className="text-red-700"> * </span> : <></>}</label>
+                                                                <input type="number" key={index} placeholder={formfield.text} className="bg-gray-100 !text-black pl-3 box-border text-base leading-10 w-full outline-none border-b-2 border-b-gray-600 h-12 focus:border-b-purple-800"
+                                                                    id={`payment-${formfield.field}`}
+                                                                    value={form.paymentDetails[formfield.field] || 0}
+                                                                    onChange={(e) => props.handleForm('paymentDetails', e.target.value, formfield.field)}
+                                                                />
+                                                            </div>
+                                                        </>
+                                                        : formfield.type === 'dropdown' ?
+                                                            <FormControl id={`payment-${formfield.field}`} variant="filled" sx={{ m: 1, minWidth: 120 }} className="!m-0 w-1/2">
+                                                                <InputLabel id="demo-simple-select-filled-label">{formfield.text}</InputLabel>
+                                                                <Select
+                                                                    labelId="demo-simple-select-filled-label"
+                                                                    id="demo-simple-select-filled"
+                                                                    value={form.paymentDetails[formfield.field]}
+                                                                    onChange={(e) => props.handleForm('paymentDetails', e.target.value, formfield.field)}
+                                                                    label={formfield.text}
+                                                                // label={<>{formfield.text} {formfield.required ? <span className="text-red-700"> * </span> : <></>}</>}
+                                                                >
+                                                                    {formfield.masterdata?.map((data: { text: string, value: string }, i: number) => (
+                                                                        <MenuItem value={data.value} key={data.text+i}>{data.text}</MenuItem>
+                                                                    ))}
+                                                                </Select>
+                                                            </FormControl>
+                                                            : formfield.type === 'switch' ?
+                                                                <div>
+                                                                    <PurpleSwitch
+                                                                        checked={form.paymentDetails[formfield.field]}
+                                                                        onChange={(e) => props.handleForm('paymentDetails', e.target.checked, formfield.field)}
+                                                                    />
+                                                                    <span className="text-sm text-slate-600">{formfield.text}</span>
+                                                                </div>
+                                                                : <></>}
+                                                <div
+                                                    id={`payment-${formfield.field}-errortext`}
+                                                    className="error-text text-xs"
+                                                ></div>
+                                            </div>
+                                        ))}
+                                    </AccordionDetails>
+                                </div>
+                            </Accordion>
+                        </div>
+                        : <></>}
+
+
                     <div className="mt-2 flex flex-row justify-between">
                         <button onClick={() => props.handleField('add-new-field', '', form.formfields.length)} className="text-purple-800 font-bold flex items-center gap-1"><AddCircle /> Add new question</button>
                         <button className="px-8 py-2  bg-purple-800 text-white text-sm rounded-md font-semibold hover:bg-purple-800/[0.8] hover:shadow-lg"
-                            onClick={() => { props.mode === 'edit' ? props.handleUpdate() : props.handleSave()}}
-                        >{props.mode === 'edit' ? 'Update': 'Create'}</button>
+                            onClick={() => { props.mode === 'edit' ? props.handleUpdate() : props.handleSave() }}
+                        >{props.mode === 'edit' ? 'Update' : 'Create'}</button>
                     </div>
 
                 </div>
