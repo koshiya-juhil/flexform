@@ -72,6 +72,8 @@ async function handleSignIn(req, res){
         delete temp.password;
 
         // setToken(res, token, temp);
+
+        console.log("Setting cookie for domain:", req.headers.origin);
         
         const maxAge = (24 * 60 * 60 * 1000) * 31;
         res.cookie("token", token.toString(), { 
@@ -79,6 +81,8 @@ async function handleSignIn(req, res){
             secure: true, 
             sameSite: 'None',
             httpOnly: false,
+            domain: 'flexform.vercel.app',
+            path: '/'
         });
 
         res.status(200).json({user: temp});
