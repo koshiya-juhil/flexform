@@ -4,12 +4,11 @@ const { generateToken } = require('../services/auth');
 async function setToken(res, token, user){
     try {
         const maxAge = (24 * 60 * 60 * 1000) * 31;
-        // res.cookie("token", token.toString(), { httpOnly: true, maxAge: 900000 })
         res.cookie("token", token.toString(), { 
             maxAge: maxAge, 
-            // secure: true, 
-            // sameSite: 'None',
-            // httpOnly: true,
+            secure: true, 
+            sameSite: 'None',
+            httpOnly: false,
         })
         res.status(200).json({user: user});
 
@@ -36,16 +35,16 @@ async function handleSignUp(req, res){
         let user = JSON.parse(JSON.stringify(response));
         delete user.password;
 
-        // setToken(res, token, user);
+        setToken(res, token, user);
 
-        const maxAge = (24 * 60 * 60 * 1000) * 31;
-        res.cookie("token", token.toString(), { 
-            maxAge: maxAge, 
-            sameSite: 'None',
-        })
-        // secure: true, 
-        // httpOnly: true,
-        res.status(200).json({user: user});
+        // const maxAge = (24 * 60 * 60 * 1000) * 31;
+        // res.cookie("token", token.toString(), { 
+        //     maxAge: maxAge, 
+        //     sameSite: 'None',
+        // })
+        // // secure: true, 
+        // // httpOnly: true,
+        // res.status(200).json({user: user});
 
     } catch (error) {
         console.log(error);
@@ -71,21 +70,19 @@ async function handleSignIn(req, res){
         let temp = JSON.parse(JSON.stringify(user));
         delete temp.password;
 
-        // setToken(res, token, temp);
+        setToken(res, token, temp);
 
-        console.log("Setting cookie for domain:", req.headers.origin);
+        // console.log("Setting cookie for domain:", req.headers.origin);
         
-        const maxAge = (24 * 60 * 60 * 1000) * 31;
-        res.cookie("token", token.toString(), { 
-            maxAge: maxAge, 
-            secure: true, 
-            sameSite: 'None',
-            httpOnly: false,
-            domain: 'flexform.vercel.app',
-            path: '/'
-        });
+        // const maxAge = (24 * 60 * 60 * 1000) * 31;
+        // res.cookie("token", token.toString(), { 
+        //     maxAge: maxAge, 
+        //     secure: true, 
+        //     sameSite: 'None',
+        //     httpOnly: false,
+        // });
 
-        res.status(200).json({user: temp});
+        // res.status(200).json({user: temp});
 
     } catch (error) {
         console.log(error);

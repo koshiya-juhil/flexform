@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom"
 import { Config } from "../../config/IISMethods"
 import { GenericObjectType } from "../../config/Types";
-import Cookies from 'js-cookie';
 
 interface SingInProps {
   handleForm: (key: string, value: string) => void;
@@ -10,10 +9,6 @@ interface SingInProps {
 }
 
 function SignIn(props: SingInProps) {
-
-  const token = Cookies.get('token');
-  console.log("Signin Page ",document.cookie)
-  console.log("Signin Page token", token);
 
   return (
     <div>

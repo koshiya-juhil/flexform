@@ -221,8 +221,8 @@ class _IISMethods {
         withCredentials: true,
       });
 
-      console.log("Response Headers:", response.headers);
-      console.log("Response Data:", response.data);
+      // console.log("Response Headers:", response.headers);
+      // console.log("Response Data:", response.data);
 
       if (response.data.notify) {
         IISMethods.localnotify(response.data.message, 1);
@@ -232,7 +232,7 @@ class _IISMethods {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("Axios Error Response:", error.response);
-        if (error.response?.status === 401) {
+        if(error.response?.status === 401) {
           // !error?.response?.data.notify && IISMethods.localnotify("Login to continue.", 0);
           IISMethods.clearLocalStorageData("user");
           // window.location.href = '/login';
