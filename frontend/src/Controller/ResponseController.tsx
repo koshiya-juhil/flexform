@@ -22,11 +22,11 @@ function ResponseController(props: ResponseControllerProps) {
     const navigate = useNavigate();
     const { formId } = useParams();
     const dispatch = useDispatch();
-    
+
     const formData = useSelector((store: RootState) => store.form);
     const state = useSelector((store: RootState) => store.state);
 
-    const initialState : ResponseControllerLocalState = {
+    const initialState: ResponseControllerLocalState = {
         disableButton: false,
     }
     const [localState, setLocalState] = useState(initialState);
@@ -64,7 +64,7 @@ function ResponseController(props: ResponseControllerProps) {
             }
 
             if (paymentStatus === 'success' && savedFormData && savedResponseFormData) {
-                submitResponse(savedResponseFormData, savedFormData);
+                submitResponse(savedResponseFormData, savedFormData, true);
             }
 
             if (paymentStatus === 'cancel' || paymentStatus === 'success') {
@@ -136,15 +136,21 @@ function ResponseController(props: ResponseControllerProps) {
 
     }
 
-    async function submitResponse(responseData?: anyValue, form?: anyValue) {
+    const submitResponse: (responseData?: anyValue, form?: anyValue, paymentStatus?: boolean) => void = async (responseData, form, paymentStatus = false) => {
+        console.log("responseData", responseData)
+        console.log("form", form)
+
         const responseFormData = responseData ? responseData : state.responseFormData;
         const tempFormData = form ? form : formData;
 
-        if (JsCall.validateForm(state.responseFormData, tempFormData.formfields, -1, props.formname, true)) {
+        console.log("responseFormData", responseFormData)
+        console.log("tempFormData", tempFormData)
+
+        if (JsCall.validateForm(responseFormData, tempFormData.formfields, -1, props.formname, true)) {
             IISMethods.localnotify("Fill all required data", 2);
             return;
         }
-        else if(formData.paymentDetails.required){
+        else if (tempFormData.paymentDetails.required && paymentStatus === false) {
             IISMethods.localnotify("Payment required", 2);
             return;
         }
@@ -235,7 +241,7 @@ function ResponseController(props: ResponseControllerProps) {
                 console.log(result.error);
             }
         }
-        
+
         function errorCallback(error: AxiosError | Error) {
             console.log("error", error);
         }

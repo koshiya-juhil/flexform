@@ -77,11 +77,11 @@ export default class JsCall {
             if (validation.type === 'text' || validation.type === 'paragraph' || validation.type === 'number') {
                 try {
                     value = value.toString();
-                    hasError = !value.match(new RegExp(validation.regex ?? ''))
+                    hasError = !value?.match(new RegExp(validation.regex ?? ''))
                         || (validation.minvalue !== undefined && parseFloat(value) < validation.minvalue)
                         || (validation.maxvalue !== undefined && parseFloat(value) > validation.maxvalue)
-                        || (validation.minlength !== undefined && value.length < validation.minlength)
-                        || (validation.maxlength !== undefined && value.length > validation.maxlength);
+                        || (validation.minlength !== undefined && value?.length < validation.minlength)
+                        || (validation.maxlength !== undefined && value?.length > validation.maxlength);
                 } catch (error) {
                     hasError = true;
                 }
@@ -93,7 +93,7 @@ export default class JsCall {
                 }
             } 
             else if(validation.type === 'checkbox'){
-                if(value.length === 0){
+                if(value?.length === 0){
                     hasError = true;
                     errText = "This is required field";
                 }

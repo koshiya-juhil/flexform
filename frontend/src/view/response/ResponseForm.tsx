@@ -3,13 +3,13 @@ import { RootState } from "../../redux/store"
 import { Checkbox, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { purple } from "@mui/material/colors";
 import { IISMethods } from "../../config/IISMethods";
-import { GenericObjectType } from "../../config/Types";
+import { GenericObjectType, anyValue } from "../../config/Types";
 import { ResponseControllerLocalState } from "../../Controller/ResponseController";
 import Spinner from "../components/Spinner";
 
 interface ResponseFormProps {
     handleFormData: (type: string, key: number | string, value: string | number | boolean, index?: number) => void;
-    submitResponse: () => void;
+    submitResponse: (responseData?: anyValue, form?: anyValue, paymentStatus?: boolean) => void;
     setDefaultFormData: () => void;
     makePayment: () => void;
     responseSubmitted: boolean;
@@ -121,7 +121,7 @@ function ResponseForm(props: ResponseFormProps) {
                                                         </div>
 
                                                         : field.type === 'checkbox' ?
-                                                            <div className="flex flex-col" id={`${props.formname ? props.formname : 'form'}-${index}`}>
+                                                            <div className="flex flex-col" id={`${props.formname ? props.formname : 'form'}-${index}`} key={`${field.field + index}`}>
                                                                 {field.options.map((option, i) => (
                                                                     <FormControlLabel
                                                                         control={
@@ -136,6 +136,7 @@ function ResponseForm(props: ResponseFormProps) {
                                                                             />
                                                                         }
                                                                         label={option.label}
+                                                                        key={`${option.label+index}`}
                                                                     />
                                                                 ))}
                                                             </div>
