@@ -23,6 +23,7 @@ function QuestionFormView(props: QuestionFormViewProps) {
     <>
       <FormHeader 
         formData={props.formData}
+        mode={props.mode}
       />
 
       <HeaderTabs 

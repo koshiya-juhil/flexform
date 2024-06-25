@@ -6,7 +6,7 @@ async function setToken(res, token, user){
         const maxAge = (24 * 60 * 60 * 1000) * 31;
         res.cookie("token", token.toString(), { 
             maxAge: maxAge, 
-            secure: true, 
+            secure: true,
             sameSite: 'None',
             httpOnly: false,
         })
@@ -21,6 +21,13 @@ async function setToken(res, token, user){
 async function handleSignUp(req, res){
     try {
         const data = req.body;
+
+        const emailCheck = await User.findOne({ email: data.email });
+
+        if(emailCheck){
+            return res.status(401).json({ error: "Email already exist", notify: true });
+        }
+
         const newUser = new User(data);
         let response = await newUser.save();
         

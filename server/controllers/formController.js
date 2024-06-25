@@ -42,6 +42,28 @@ async function updateForm(req, res){
     }
 }
 
+async function deleteForm(req, res){
+    try {
+        const formId = req.params.formId;
+        console.log("formId", formId);
+        if(!isValidObjectId(formId)){
+            return res.status(400).json({ error: "Invalid formId", notify: true });
+        }
+
+        const response = await Form.findByIdAndDelete(formId);
+        
+        if(!response){
+            return res.status(404).json({ error: "Form not found", notify: true });
+        }
+
+        res.status(200).json({response: response, notify: true, message: 'Form deleted successfully'});
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Internal Server Error", notify : true });
+    }
+}
+
 async function getFormsByUser(req, res) {
     try {
         const user = req.user;
@@ -92,4 +114,4 @@ async function getFormsByTitle(req, res){
     }
 }
 
-module.exports = { createForm, getFormsByUser, updateForm, getFormById, getFormsByTitle };
+module.exports = { createForm, getFormsByUser, updateForm, getFormById, getFormsByTitle, deleteForm };

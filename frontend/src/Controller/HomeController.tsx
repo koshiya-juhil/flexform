@@ -2,15 +2,15 @@ import { useCallback, useEffect, useState } from "react"
 import Home from "../view/home/Home"
 import { Config, IISMethods } from "../config/IISMethods";
 import { AxiosError, AxiosResponse } from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setState } from "../redux/stateSlice";
-import { useNavigate } from "react-router-dom";
 import _debounce from 'lodash.debounce'
+import { RootState } from "../redux/store";
 
 function HomeController() {
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const state = useSelector((store: RootState) => store.state);
 
     const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -30,13 +30,6 @@ function HomeController() {
         function listErrorCallback(err: AxiosError | Error): void{
             console.log(err);
         }
-    }
-
-    function handleLogout(){
-        IISMethods.clearCookie('token');
-
-        IISMethods.clearLocalStorageData('user');
-        navigate('/signin');
     }
 
     const debounceFn = useCallback(_debounce(getSearchData, 500), []);
@@ -66,13 +59,29 @@ function HomeController() {
 
     }
 
+    const handleDeleteForm = (formId: string) => {
+        const url = Config.serverUrl + 'form' + '/' + formId;
+    
+        IISMethods.axiosRequest('delete', url, {}, {}, successCallback, errorCallback);
+    
+        function successCallback(res: AxiosResponse){
+            console.log("res.data", res.data);
+            const tempFormData = IISMethods.removeObjectFromArray(IISMethods.getCopy(state.myForms), '_id', res.data.response._id);
+            dispatch(setState({ myForms: tempFormData }))
+        }
+    
+        function errorCallback(error: AxiosError | Error){
+          console.log(error);
+        }
+    }
+
 
     return (
         <>
             <Home 
-                handleLogout={handleLogout}
                 searchQuery={searchQuery}
                 handleSearchQuery={handleSearchQuery}
+                handleDeleteForm={handleDeleteForm}
             />
         </>
     )

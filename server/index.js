@@ -29,7 +29,7 @@ const corsOptions = {
     },
     credentials: true,
     optionsSuccessStatus: 200,
-    methods: ['GET', 'POST', 'PUT']
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
 }
 
 // const corsOptions = {

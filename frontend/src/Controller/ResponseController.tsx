@@ -14,12 +14,22 @@ interface ResponseControllerProps {
     formname: string;
 }
 
+export type ResponseControllerLocalState = {
+    disableButton: boolean;
+}
+
 function ResponseController(props: ResponseControllerProps) {
     const navigate = useNavigate();
     const { formId } = useParams();
     const dispatch = useDispatch();
+    
     const formData = useSelector((store: RootState) => store.form);
     const state = useSelector((store: RootState) => store.state);
+
+    const initialState : ResponseControllerLocalState = {
+        disableButton: false,
+    }
+    const [localState, setLocalState] = useState(initialState);
 
     const [responseSubmitted, setResponseSubmitted] = useState<boolean>(false);
 
@@ -192,6 +202,7 @@ function ResponseController(props: ResponseControllerProps) {
     const makePayment = async () => {
         if (JsCall.validateForm(state.responseFormData, formData.formfields, -1, props.formname, true)) {
             IISMethods.localnotify("Fill all required data", 2);
+            setLocalState({ ...localState, disableButton: false });
             return;
         }
 
@@ -210,7 +221,10 @@ function ResponseController(props: ResponseControllerProps) {
             current_url: window.location.href
         }
 
-        IISMethods.axiosRequest('post', url, reqBody, {}, successCallback, errorCallback);
+        IISMethods.axiosRequest('post', url, reqBody, {}, successCallback, errorCallback)
+            .then(() => {
+                setLocalState({ ...localState, disableButton: false });
+            })
 
         async function successCallback(res: AxiosResponse) {
             const result = await stripe?.redirectToCheckout({
@@ -221,7 +235,7 @@ function ResponseController(props: ResponseControllerProps) {
                 console.log(result.error);
             }
         }
-
+        
         function errorCallback(error: AxiosError | Error) {
             console.log("error", error);
         }
@@ -238,6 +252,8 @@ function ResponseController(props: ResponseControllerProps) {
                 responseSubmitted={responseSubmitted}
                 formname={props.formname}
                 makePayment={makePayment}
+                localState={localState}
+                setLocalState={setLocalState}
             />
         </>
     )

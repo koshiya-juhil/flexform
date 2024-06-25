@@ -145,6 +145,14 @@ class _IISMethods {
     }
   }
 
+  removeObjectFromArray(arr: AnyArray, key: string, value: anyValue): AnyArray {
+    try {
+      return arr.filter((o) => o[key] !== value);
+    } catch (error) {
+      return arr;
+    }
+  }
+
   // date and time methods
   /**
    * Formats a given date into various string formats based on the specified format identifier.

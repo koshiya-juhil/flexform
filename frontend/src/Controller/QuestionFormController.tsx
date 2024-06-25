@@ -166,7 +166,7 @@ function QuestionFormController(props: QuestionFormControllerProps) {
     function addSuccessCallback(res: AxiosResponse): void {
       dispatch(setForm(res.data.response));
 
-      navigate(`/form/edit/${res.data.response._id}`)
+      navigate(`/form/edit/${res.data.response._id}`, { replace: true })
     }
 
     function addErrorCallback(err: AxiosError | Error): void {
@@ -199,6 +199,20 @@ function QuestionFormController(props: QuestionFormControllerProps) {
       console.log(err);
     }
   }
+
+  // const handleDelete = (formid: string) => {
+  //   const url = Config.serverUrl + props.pagename + '/' + formid;
+
+  //   IISMethods.axiosRequest('delete', url, {}, {}, successCallback, errorCallback);
+
+  //   function successCallback(res: AxiosResponse){
+  //     console.log("res.data", res.data);
+  //   }
+
+  //   function errorCallback(error: AxiosError | Error){
+  //     console.log(error);
+  //   }
+  // }
 
   return (
     <>

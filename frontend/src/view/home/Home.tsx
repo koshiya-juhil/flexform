@@ -3,9 +3,9 @@ import HomeTemplate from "../components/HomeTemplate";
 import RecentForms from "../components/RecentForms";
 
 interface HomeProps {
-    handleLogout: () => void;
     searchQuery: string;
     handleSearchQuery: (value: string) => void;
+    handleDeleteForm: (formId: string) => void;
 }
 
 const Home = (props: HomeProps) => {
@@ -14,12 +14,13 @@ const Home = (props: HomeProps) => {
         return (
             <>
                 <Header
-                    handleLogout={props.handleLogout}
                     searchQuery={props.searchQuery}
                     handleSearchQuery={props.handleSearchQuery}
                 />
                 <HomeTemplate/>
-                <RecentForms/>
+                <RecentForms
+                    handleDeleteForm={props.handleDeleteForm}
+                />
             </>
         )
     } catch (error) {

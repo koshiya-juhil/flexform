@@ -27,7 +27,18 @@ function UserController(props : UserProps) {
 
     const handleSignUp = () => {
         const url = Config.serverUrl + props.pagename;
-        const { email, password } = state;
+        const { email, password, comfirmpassword } = state;
+
+        if(password != comfirmpassword){
+            IISMethods.localnotify('Password and Confirm password should match', 2);
+            return;
+        }
+
+        if(!email || !password || !comfirmpassword){
+            IISMethods.localnotify('Fill all required data', 2);
+            return;
+        }
+
         const reqData = { email, password };
 
         IISMethods.axiosRequest('post', url, reqData, {}, addSuccessCallback, addErrorCallback);
@@ -47,6 +58,12 @@ function UserController(props : UserProps) {
     const handleSignIn = async () => {
         const url = Config.serverUrl + props.pagename;
         const { email, password } = state;
+
+        if(!email || !password){
+            IISMethods.localnotify('Fill all required data', 2);
+            return;
+        }
+
         const reqData = { email, password };
 
         IISMethods.axiosRequest('post', url, reqData, {}, addSuccessCallback, addErrorCallback);

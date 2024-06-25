@@ -1,5 +1,5 @@
 const express = require('express');
-const { createForm, getFormsByUser, updateForm, getFormById, getFormsByTitle } = require('../controllers/formController');
+const { createForm, getFormsByUser, updateForm, getFormById, getFormsByTitle, deleteForm } = require('../controllers/formController');
 const { restrictTo } = require('../middlewares/authMiddleware');
 const { addResponse, responsesByFormId } = require('../controllers/responseController');
 const router = express.Router();
@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/list', restrictTo(), getFormsByUser);
 router.post('/add', restrictTo(), createForm);
 router.put('/update', restrictTo(), updateForm);
+router.delete('/:formId', restrictTo(), deleteForm);
 
 router.get('/:formId', getFormById);
 router.get('/search/:query', getFormsByTitle);

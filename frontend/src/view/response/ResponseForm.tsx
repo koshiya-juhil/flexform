@@ -4,6 +4,8 @@ import { Checkbox, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { purple } from "@mui/material/colors";
 import { IISMethods } from "../../config/IISMethods";
 import { GenericObjectType } from "../../config/Types";
+import { ResponseControllerLocalState } from "../../Controller/ResponseController";
+import Spinner from "../components/Spinner";
 
 interface ResponseFormProps {
     handleFormData: (type: string, key: number | string, value: string | number | boolean, index?: number) => void;
@@ -12,6 +14,8 @@ interface ResponseFormProps {
     makePayment: () => void;
     responseSubmitted: boolean;
     formname: string;
+    localState: ResponseControllerLocalState;
+    setLocalState: React.Dispatch<React.SetStateAction<ResponseControllerLocalState>>;
 }
 
 function ResponseForm(props: ResponseFormProps) {
@@ -150,10 +154,15 @@ function ResponseForm(props: ResponseFormProps) {
 
                                 {/* Payment btn */}
                                 <div className="form-group rounded-lg flex flex-col w-full my-3">
-                                    <button className="px-5 py-2  bg-purple-800 text-white text-sm rounded-md font-semibold hover:bg-purple-800/[0.8] hover:shadow-lg"
-                                        onClick={() => props.makePayment()}
+                                    <button className="flex justify-center items-center px-5 py-2 bg-purple-800 text-white text-sm rounded-md font-semibold hover:bg-purple-800/[0.8] hover:shadow-lg"
+                                        onClick={() => {
+                                            props.setLocalState({ ...props.localState, disableButton: true });
+                                            props.makePayment()
+                                        }}
+                                        disabled={props.localState.disableButton}
                                     >
-                                        Make Payment
+                                        {props.localState.disableButton && <Spinner />}
+                                        <span className="ml-2">{props.localState.disableButton ? 'Connecting to Stripe...' : 'Make Payment'}</span>
                                     </button>
                                 </div>
 
