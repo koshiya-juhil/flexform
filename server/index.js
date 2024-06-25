@@ -16,20 +16,25 @@ const prodOrigins = [process.env.ORIGIN_PROD_1]
 const devOrigins = [process.env.ORIGIN_LOCAL]
 const allowedOrigins = process.env.NODE_ENV === 'prod' ? prodOrigins : devOrigins;
 
+// const corsOptions = {
+//     origin: (origin, callback) => {
+//         console.log('allowedOrigins:', allowedOrigins);
+//         console.log('Origin:', origin);
+//         if(!origin || allowedOrigins.includes(origin)){
+//             callback(null, true);
+//         }
+//         else {
+//             callback(new Error('Not allowed by CORS'));
+//         }
+//     },
+//     credentials: true,
+//     optionsSuccessStatus: 200,
+//     methods: ['GET', 'POST', 'PUT']
+// }
+
 const corsOptions = {
-    origin: (origin, callback) => {
-        console.log('allowedOrigins:', allowedOrigins);
-        console.log('Origin:', origin);
-        if(!origin || allowedOrigins.includes(origin)){
-            callback(null, true);
-        }
-        else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
-    optionsSuccessStatus: 200,
-    methods: ['GET', 'POST', 'PUT']
+    origin: 'https://flexform.vercel.app',
+    credentials: true
 }
 
 app.use(cors(corsOptions));

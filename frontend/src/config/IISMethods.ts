@@ -221,14 +221,17 @@ class _IISMethods {
         withCredentials: true,
       });
 
+      console.log("Response Headers:", response.headers);
+      console.log("Response Data:", response.data);
+
       if (response.data.notify) {
-        console.log("response.data", response.data);
         IISMethods.localnotify(response.data.message, 1);
       }
 
       successCallback(response);
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        console.log("Axios Error Response:", error.response);
         if (error.response?.status === 401) {
           // !error?.response?.data.notify && IISMethods.localnotify("Login to continue.", 0);
           IISMethods.clearLocalStorageData("user");
