@@ -77,9 +77,9 @@ async function handleSignIn(req, res){
         res.cookie("token", token.toString(), { 
             maxAge: maxAge, 
             secure: true, 
-            sameSite: 'Strict',
+            sameSite: 'None',
+            httpOnly: false,
         });
-        // httpOnly: true, 
 
         res.status(200).json({user: temp});
 
