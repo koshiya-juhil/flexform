@@ -16,7 +16,7 @@ const FormHeader = (props: FormHeaderProps) => {
         <div className="flex items-center justify-between my-1 mx-4">
             <div className="flex items-center justify-evenly">
                 <div className="flex items-center ml-2 header">
-                    <div className="text-2xl font-bold text-gray-700">{Config.websiteName}</div>
+                    <div className="text-2xl font-medium text-gray-700">{Config.websiteName}</div>
                 </div>
             </div>
             <div className="flex items-center justify-between gap-2">

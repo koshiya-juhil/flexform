@@ -17,7 +17,7 @@ function Header(props: HeaderProps) {
                     <MenuIcon />
                 </IconButton> */}
                 <div className="flex items-center ml-2 header">
-                    <div className="text-2xl font-bold text-gray-700">{Config.websiteName}</div>
+                    <div className="text-2xl font-medium text-gray-700">{Config.websiteName}</div>
                 </div>
             </div>
 

@@ -28,7 +28,7 @@ function ResponseForm(props: ResponseFormProps) {
         <div className="bg-slate-100 h-full mt-3">
             <div className="pb-7 m-auto w-45p">
 
-                {!formData.isActive ?
+                {formData.isActive === false ?
                     <div className="question_title_section border-light rounded-lg">
                         <div className="bg-white border-t-8 border-t-purple-800 rounded-lg pb-5 pt-3 px-6">
                             <h1 className="text-2xl font-semibold">{formData.title}</h1>
@@ -38,8 +38,7 @@ function ResponseForm(props: ResponseFormProps) {
                     </div>
                     :
                     <>
-                        {props.responseSubmitted ?
-
+                        {props.responseSubmitted === true ?
                             <>
                                 <div className="question_title_section border-light rounded-lg">
                                     <div className="bg-white border-t-8 border-t-purple-800 rounded-lg pb-5 pt-3 px-6">

@@ -48,6 +48,7 @@ async function paymentSession(req, res) {
 
   options.success_url = `${current_url}?payment_status=success`
   options.cancel_url = `${current_url}?payment_status=cancel`
+  options.billing_address_collection = 'required';
 
   const session = await stripe.checkout.sessions.create(options);
 
