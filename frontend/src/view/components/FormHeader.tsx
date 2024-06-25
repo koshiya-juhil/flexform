@@ -4,6 +4,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Config, IISMethods } from '../../config/IISMethods';
 import { Form } from '../../config/Types';
 import UserMenu from './UserMenu';
+import { Link } from 'react-router-dom';
 
 interface FormHeaderProps {
     formData: Form;
@@ -16,7 +17,7 @@ const FormHeader = (props: FormHeaderProps) => {
         <div className="flex items-center justify-between my-1 mx-4">
             <div className="flex items-center justify-evenly">
                 <div className="flex items-center ml-2 header">
-                    <div className="text-2xl font-medium text-gray-700">{Config.websiteName}</div>
+                    <Link to='/'> <div className="text-2xl font-medium text-gray-700">{Config.websiteName}</div> </Link>
                 </div>
             </div>
             <div className="flex items-center justify-between gap-2">

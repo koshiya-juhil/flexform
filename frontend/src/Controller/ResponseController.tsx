@@ -183,13 +183,31 @@ function ResponseController(props: ResponseControllerProps) {
 
         const user: GenericObjectType | null = IISMethods.getLocalStorageData('user');
 
-        const reqData = {
+        const reqData : {
+            formId: string;
+            responses: GenericObjectType[];
+            submittedBy: {
+                id: string;
+                name: string;
+                email: string;
+            };
+            payment?: {
+                status: string;
+                amount?: number;
+            }
+        } = {
             formId: tempFormData._id,
             responses: responses,
             submittedBy: {
                 id: user ? user._id : '',
                 name: '',
                 email: user ? user.email : '',
+            }
+        }
+
+        if(paymentStatus === true){
+            reqData.payment = {
+                status: 'done',
             }
         }
 

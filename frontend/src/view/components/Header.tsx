@@ -2,6 +2,7 @@ import { Search } from "@mui/icons-material"
 import { IconButton } from "@mui/material"
 import { Config } from "../../config/IISMethods"
 import UserMenu from "./UserMenu";
+import { Link } from "react-router-dom";
 
 interface HeaderProps {
     searchQuery: string;
@@ -17,7 +18,7 @@ function Header(props: HeaderProps) {
                     <MenuIcon />
                 </IconButton> */}
                 <div className="flex items-center ml-2 header">
-                    <div className="text-2xl font-medium text-gray-700">{Config.websiteName}</div>
+                    <Link to='/'> <div className="text-2xl font-medium text-gray-700">{Config.websiteName}</div> </Link>
                 </div>
             </div>
 

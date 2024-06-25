@@ -19,6 +19,10 @@ const responseSchema = new mongoose.Schema({
             }
         }
     ],
+    payment: {
+        status: { type: String },
+        amount: { type: Number },
+    },
     submittedBy: {
         id: {
             type: mongoose.Schema.Types.ObjectId,
