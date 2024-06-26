@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { Accordion, AccordionDetails, AccordionSummary, Button, FormControl, FormControlLabel, IconButton, InputLabel, Menu, MenuItem, Select, Switch } from "@mui/material";
-import { AddCircle, ArrowDropDownCircleOutlined, Check, CheckBox, Close, DeleteOutline, FilterNone, MoreVert, RadioButtonChecked, ShortText, Subject } from "@mui/icons-material";
+import { AddCircle, Check, CheckBox, Close, DeleteOutline, FilterNone, MoreVert, RadioButtonChecked, ShortText, Subject } from "@mui/icons-material";
 import { Value } from "../../config/Types";
 import { PurpleSwitch } from "../components/styleComponents";
 import { FormField } from "../MastersJson";
@@ -129,7 +129,7 @@ function QuestionForm(props: QuestionFormProps) {
                                                 <MenuItem id="paragraph" value="paragraph"> <Subject className="mr-2.5" style={{ color: "#70757a" }} /> Paragraph</MenuItem>
                                                 <MenuItem id="radio" value="radio" ><RadioButtonChecked className="mr-2.5" style={{ color: "#70757a" }} />Multiple Choice</MenuItem>
                                                 <MenuItem id="checkbox" value="checkbox"><CheckBox className="mr-2.5" style={{ color: "#70757a" }} />Checkboxes</MenuItem>
-                                                <MenuItem id="dropdown" value="dropdown"><ArrowDropDownCircleOutlined className="mr-2.5" style={{ color: "#70757a" }} />Dropdown</MenuItem>
+                                                {/* <MenuItem id="dropdown" value="dropdown"><ArrowDropDownCircleOutlined className="mr-2.5" style={{ color: "#70757a" }} />Dropdown</MenuItem> */}
                                             </Select>
                                         </div>
 
